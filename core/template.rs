@@ -1,4 +1,6 @@
 /*
+Layer: core | Role: template | Domain: systems
+
 Technical Role: Safe concurrency & secure systems
 Symbolic Role: Guardian
 Use Case: Integrity engine

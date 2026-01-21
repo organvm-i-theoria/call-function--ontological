@@ -15,10 +15,11 @@ rules:
         - https://github.com/functioncalled/spec
 
   # Rule 2: Detect missing layer declaration in header
+  # Only matches canonical "| Role:" format, not "Technical Role:" etc.
   - id: functioncalled-missing-layer
     patterns:
       - pattern-regex: |
-          (?:/\*|#|//|--|<!--|'''|""")[\s\S]{0,100}Role:\s*\w+
+          (?:/\*|#|//|--|<!--|'''|""")[\s\S]{0,100}\|\s*Role:\s*\w+
       - pattern-not-regex: |
           Layer:\s*\w+
     message: "Header comment has Role but missing Layer declaration"

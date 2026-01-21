@@ -1,4 +1,6 @@
 //
+// Layer: application | Role: template | Domain: ios
+//
 // Technical Role: iOS apps
 // Symbolic Role: Phoenix
 // Use Case: Shrine AR apps

@@ -1,3 +1,5 @@
+# Layer: logic | Role: template | Domain: scripting
+#
 # Technical Role: Dynamic scripting
 # Symbolic Role: Alchemist
 # Use Case: Generative hubs
