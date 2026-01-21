@@ -1,4 +1,6 @@
 /*
+Layer: application | Role: template | Domain: android
+
 Technical Role: Android apps
 Symbolic Role: Duality
 Use Case: Shrine apps (Android)

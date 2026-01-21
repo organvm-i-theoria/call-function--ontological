@@ -1,4 +1,6 @@
 /*
+Layer: core | Role: template | Domain: backend
+
 Technical Role: Concurrent backend services
 Symbolic Role: Messengers
 Use Case: APIs & sync
