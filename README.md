@@ -147,6 +147,7 @@ make hook-install    # Install pre-commit validation
 | [Quick Start](docs/quickstart.md) | Get started in 5 minutes |
 | [Full Specification](standards/FUNCTIONcalled_Spec_v1.0.md) | Complete naming rules and rationale |
 | [Layer Architecture](docs/layers.md) | Visual guide with dependency rules |
+| [Rosetta Codex](docs/rosetta-codex.md) | Language-to-layer mapping with symbolic roles |
 | [Migration Guide](docs/migration.md) | Adopt in existing projects |
 | [Comparison](docs/comparison.md) | vs. BEM, Atomic Design, Clean Architecture |
 | [Case Study](docs/case-study.md) | Real-world adoption example |
