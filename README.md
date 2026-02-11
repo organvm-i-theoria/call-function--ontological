@@ -514,7 +514,7 @@ The Rosetta Codex's mapping of 14 file types to symbolic roles (C as "stone tabl
 
 ## Related Work
 
-- **[recursive-engine](https://github.com/organvm-i-theoria/recursive-engine)** — ORGAN-I's flagship repository; recursive computation framework that shares FUNCTIONcalled()'s concern with self-referential structure
+- **[recursive-engine](https://github.com/organvm-i-theoria/recursive-engine--generative-entity)** — ORGAN-I's flagship repository; recursive computation framework that shares FUNCTIONcalled()'s concern with self-referential structure
 - **[agentic-titan](https://github.com/organvm-iv-taxis/agentic-titan)** — ORGAN-IV orchestration system; the registry pattern in FUNCTIONcalled() anticipates the kind of artifact tracking that orchestration systems require
 - **[Schema.org](https://schema.org)** — The linked data vocabulary that FUNCTIONcalled() bridges to via the `schema:type` field in metadata sidecars
 - **[JSON Schema Draft 2020-12](https://json-schema.org/draft/2020-12/json-schema-core)** — The validation standard used for metadata sidecar schemas
