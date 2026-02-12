@@ -4,6 +4,10 @@ Validate file names against the FUNCTIONcalled naming convention.
 
 Pattern: {Layer}.{Role}.{Domain}.{Extension}
 Layers: core|interface|logic|application (or aliases: bones|skins|breath|body)
+
+Python source files (.py) in layer directories are exempt because Python's import
+system requires module_name.py format — dot-separated names would break imports.
+Test files, example scripts, and standard project config files are also excluded.
 """
 
 import argparse
@@ -37,7 +41,7 @@ NAMING_PATTERN = re.compile(
 # Files/directories to exclude from validation
 EXCLUDE_PATTERNS = [
     r'^\..*',  # Dotfiles
-    r'^_.*',  # Underscore-prefixed files
+    r'^_.*',  # Underscore-prefixed files (includes __init__.py)
     r'^README.*',
     r'^LICENSE.*',
     r'^CLAUDE\.md$',  # Claude Code config file
@@ -52,6 +56,9 @@ EXCLUDE_PATTERNS = [
     r'^CONTRIBUTING\.md$',  # Contribution guidelines
     r'^CODE_OF_CONDUCT\.md$',  # Code of conduct
     r'^.*\.code-snippets$',  # VS Code snippets
+    r'^pyproject\.toml$',  # Python project configuration
+    r'^setup\.py$',  # Legacy Python packaging
+    r'^setup\.cfg$',  # Legacy Python packaging
 ]
 
 EXCLUDE_DIRS = [
@@ -67,7 +74,14 @@ EXCLUDE_DIRS = [
     'registry',  # Registry directory exempt
     'archive',  # Archive directory exempt
     'docs',  # Documentation directory exempt
+    'tests',  # Test files follow pytest conventions, not FUNCTIONcalled
+    'examples',  # Example scripts follow their own conventions
 ]
+
+
+def is_python_package_dir(dirpath: Path) -> bool:
+    """Check if a directory is a Python package (contains __init__.py)."""
+    return (dirpath / '__init__.py').exists()
 
 
 def is_excluded(path: Path, root: Path) -> bool:
@@ -82,6 +96,15 @@ def is_excluded(path: Path, root: Path) -> bool:
     filename = path.name
     for pattern in EXCLUDE_PATTERNS:
         if re.match(pattern, filename, re.IGNORECASE):
+            return True
+
+    # Python source files in layer directories that are Python packages
+    # are exempt — Python imports require module_name.py format,
+    # not Layer.Role.Domain.py
+    if filename.endswith('.py'):
+        parent = path.parent
+        parent_name = parent.name
+        if parent_name.lower() in ALL_LAYERS and is_python_package_dir(parent):
             return True
 
     return False
