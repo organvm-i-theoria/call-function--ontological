@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metadata Ideation Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-pt');
+
+```
+    * {
+        font-family: 'Futura PT', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-weight: 300;
+        letter-spacing: 0.02em;
+    }
+
+    body {
+        background: #000000;
+        color: #ffffff;
+        overflow-x: hidden;
+    }
+
+    .monolith {
+        background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.03) 0%, 
+            rgba(255, 255, 255, 0.01) 50%, 
+            rgba(255, 255, 255, 0.03) 100%);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 
+            0 0 80px rgba(255, 255, 255, 0.03),
+            inset 0 0 80px rgba(255, 255, 255, 0.02);
+    }
+
+    .glass-surface {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .glass-surface:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.12);
+        transform: translateZ(10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .hal-text {
+        font-weight: 100;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .hal-input {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 200;
+        letter-spacing: 0.02em;
+        transition: all 0.4s ease;
+    }
+
+    .hal-input:focus {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.2);
+        outline: none;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .hal-input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+        font-weight: 200;
+    }
+
+    .primary-button {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 200;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .primary-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.6s;
+    }
+
+    .primary-button:hover::before {
+        left: 100%;
+    }
+
+    .primary-button:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+    }
+
+    .suggestion-cube {
+        background: rgba(255, 255, 255, 0.015);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .suggestion-cube::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.01);
+        opacity: 0;
+        transition: opacity 0.6s ease;
+    }
+
+    .suggestion-cube:hover::before {
+        opacity: 1;
+    }
+
+    .suggestion-cube:hover {
+        transform: translateY(-8px) scale(1.02);
+        border-color: rgba(255, 255, 255, 0.15);
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .data-field {
+        background: rgba(255, 255, 255, 0.01);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+        font-weight: 300;
+        font-size: 0.85rem;
+        letter-spacing: 0.01em;
+    }
+
+    .loader-ring {
+        width: 60px;
+        height: 60px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-top: 2px solid rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: 200;
+        letter-spacing: 0.02em;
+    }
+
+    .metric-text {
+        font-family: 'SF Mono', 'Monaco', monospace;
+        font-weight: 300;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.6);
+        letter-spacing: 0.05em;
+    }
+
+    /* Subtle ambient glow */
+    .ambient-glow {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 800px;
+        height: 800px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.002) 0%, transparent 70%);
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: -1;
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="ambient-glow"></div>
+
+```
+<div class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-6xl">
+
+        <!-- Header -->
+        <header class="text-center mb-16 fade-in">
+            <h1 class="text-5xl md:text-7xl hal-text font-thin mb-4 tracking-widest">
+                METADATA
+            </h1>
+            <div class="w-32 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto mb-6 opacity-30"></div>
+            <p class="text-lg md:text-xl text-white/60 font-light max-w-2xl mx-auto leading-relaxed">
+                IDEATION INTERFACE
+            </p>
+        </header>
+
+        <!-- Main Interface -->
+        <main class="monolith rounded-lg">
+            <div id="input-section" class="p-12 md:p-16">
+                <div class="max-w-4xl mx-auto">
+                    <label for="brainDump" class="block text-center mb-12">
+                        <span class="hal-text text-sm tracking-[0.2em] text-white/70">INPUT</span>
+                    </label>
+                    
+                    <div class="glass-surface rounded-lg p-8 mb-8">
+                        <textarea 
+                            id="brainDump" 
+                            rows="8" 
+                            class="w-full hal-input rounded-lg p-6 text-lg resize-none bg-transparent border-0 focus:ring-0"
+                            placeholder="Enter data stream..."
+                        ></textarea>
+                        
+                        <div class="flex justify-center mt-6">
+                            <label for="fileUpload" class="cursor-pointer glass-surface px-6 py-3 rounded-lg hover:bg-white/[0.03] transition-all duration-300">
+                                <span class="hal-text text-xs tracking-wider text-white/70">UPLOAD</span>
+                                <input type="file" id="fileUpload" class="hidden">
+                            </label>
+                            <span id="fileName" class="ml-4 text-white/40 text-sm self-center metric-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button id="generateBtn" class="primary-button px-12 py-4 rounded-lg text-sm">
+                            PROCESS
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Interface -->
+            <div id="loading" class="hidden p-16 text-center">
+                <div class="loader-ring mx-auto mb-8"></div>
+                <div class="hal-text text-sm tracking-[0.15em] text-white/60 mb-2">PROCESSING</div>
+                <div class="metric-text">ANALYZING DATA PATTERNS</div>
+            </div>
+
+            <!-- Results Interface -->
+            <div id="output-section" class="hidden p-12 md:p-16">
+                <div class="text-center mb-12">
+                    <div class="hal-text text-sm tracking-[0.2em] text-white/70 mb-4">OUTPUT</div>
+                    <div class="w-24 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto opacity-20"></div>
+                </div>
+                
+                <div id="suggestionsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                    <!-- Suggestion cubes will be injected here -->
+                </div>
+                
+                <div class="text-center mt-16">
+                    <button id="resetBtn" class="glass-surface px-8 py-3 rounded-lg hal-text text-xs tracking-wider text-white/70 hover:text-white/90 transition-all duration-300">
+                        RESET
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Message System -->
+<div id="messageBox" class="hidden fixed top-8 right-8 message-panel py-3 px-6 rounded-lg">
+    <p id="messageText" class="text-sm text-white/80"></p>
+</div>
+
+<script>
+    // --- DOM Elements ---
+    const generateBtn = document.getElementById('generateBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const fileUpload = document.getElementById('fileUpload');
+    const brainDump = document.getElementById('brainDump');
+    const loadingDiv = document.getElementById('loading');
+    const outputSection = document.getElementById('output-section');
+    const inputSection = document.getElementById('input-section');
+    const suggestionsGrid = document.getElementById('suggestionsGrid');
+
+    // --- Event Listeners ---
+    generateBtn.addEventListener('click', handleGenerate);
+    resetBtn.addEventListener('click', handleReset);
+    fileUpload.addEventListener('change', handleFileUpload);
+    
+    function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        document.getElementById('fileName').textContent = file.name.toUpperCase();
+        
+        const supportedTypes = ['text/plain', 'text/markdown', 'text/html', 'application/json', 'text/csv'];
+        
+        if (supportedTypes.includes(file.type) || file.name.endsWith('.md')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                brainDump.value = `FILE: ${file.name}\n\n${e.target.result}`;
+                showMessage("FILE LOADED", "success");
+            };
+            reader.onerror = function() {
+                showMessage("READ ERROR", "error");
+                brainDump.value = `FILE: ${file.name}\n\nCONTENT UNREADABLE`;
+            };
+            reader.readAsText(file);
+        } else {
+            showMessage("BINARY FILE DETECTED", "info");
+            brainDump.value = `FILE: ${file.name}`;
+        }
+    }
+
+    async function handleGenerate() {
+        if (!brainDump.value.trim()) {
+            showMessage("INPUT REQUIRED", "error");
+            return;
+        }
+
+        inputSection.classList.add('hidden');
+        loadingDiv.classList.remove('hidden');
+        outputSection.classList.add('hidden');
+        suggestionsGrid.innerHTML = '';
+
+        try {
+            const mockResponse = generateMockResponse(brainDump.value);
+            await new Promise(resolve => setTimeout(resolve, 2500));
+            populateSuggestions(mockResponse);
+            loadingDiv.classList.add('hidden');
+            outputSection.classList.remove('hidden');
+        } catch (error) {
+            console.error("Process error:", error);
+            showMessage("SYSTEM ERROR", "error");
+            handleReset();
+        }
+    }
+    
+    function handleReset() {
+        inputSection.classList.remove('hidden');
+        loadingDiv.classList.add('hidden');
+        outputSection.classList.add('hidden');
+        brainDump.value = '';
+        fileUpload.value = '';
+        document.getElementById('fileName').textContent = '';
+    }
+    
+    function generateMockResponse(input) {
+        const suggestions = [
+            {
+                title: "CREATOR PROTOCOL",
+                description: "Optimized for creative workflow management and version control",
+                filename: "2024.06.27_project_metadata_v2.1.md",
+                folder: "/vault/active/2024/",
+                keywords: ["creative", "active", "metadata", "2024"]
+            },
+            {
+                title: "ACADEMIC STANDARD",
+                description: "Research-grade classification with citation compatibility",
+                filename: "metadata_ideation_research_20240627.pdf",
+                folder: "/research/cs/hci/",
+                keywords: ["research", "academic", "hci", "computer-science"]
+            },
+            {
+                title: "SEMANTIC STRUCTURE",
+                description: "Machine-readable format for automation and AI processing",
+                filename: "metadata.engine.schema.json",
+                folder: "/schemas/semantic/",
+                keywords: ["semantic", "schema", "automation", "json"]
+            },
+            {
+                title: "DEVELOPMENT BUILD",
+                description: "Version-controlled structure for software development cycles",
+                filename: "metadata_engine.dev.js",
+                folder: "/src/tools/metadata/",
+                keywords: ["development", "tools", "javascript", "src"]
+            },
+            {
+                title: "ARCHIVE SYSTEM",
+                description: "Long-term preservation with comprehensive metadata",
+                filename: "20240627-metadata-ideation-engine-v1.0.0.docx",
+                folder: "/archive/documentation/2024/q2/",
+                keywords: ["archive", "documentation", "preservation", "q2"]
+            },
+            {
+                title: "MINIMAL CORE",
+                description: "Essential structure with maximum flexibility and simplicity",
+                filename: "metadata_engine",
+                folder: "/core/",
+                keywords: ["core", "minimal", "essential", "flexible"]
+            }
+        ];
+
+        return { suggestions };
+    }
+    
+    function populateSuggestions(aiData) {
+        if (!aiData.suggestions || aiData.suggestions.length === 0) {
+            showMessage("NO DATA GENERATED", "error");
+            return;
+        }
+
+        aiData.suggestions.forEach((suggestion, index) => {
+            const cardHTML = `
+                <div class="suggestion-cube rounded-lg p-8 fade-in" style="animation-delay: ${index * 0.1}s">
+                    <div class="mb-8">
+                        <h3 class="hal-text text-lg font-light mb-4 tracking-wide">${suggestion.title}</h3>
+                        <p class="text-sm text-white/60 font-light leading-relaxed">${suggestion.description}</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="data-field rounded p-4">
+                            <div class="metric-text mb-1">FILENAME</div>
+                            <div class="text-white/80 text-sm font-light break-all">${suggestion.filename}</div>
+                        </div>
+                        <div class="data-field rounded p-4">
+                            <div class="metric-text mb-1">PATH</div>
+                            <div class="text-white/80 text-sm font-light break-all">${suggestion.folder}</div>
+                        </div>
+                        <div class="data-field rounded p-4">
+                            <div class="metric-text mb-1">TAGS</div>
+                            <div class="text-white/80 text-sm font-light">${suggestion.keywords.join(' • ')}</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-right">
+                        <button class="glass-surface px-4 py-2 rounded text-xs hal-text tracking-wider text-white/60 hover:text-white/90 hover:bg-white/[0.02] transition-all duration-300"
+                            onclick="copyAll(this)">
+                            COPY
+                        </button>
+                    </div>
+                </div>
+            `;
+            suggestionsGrid.insertAdjacentHTML('beforeend', cardHTML);
+        });
+    }
+
+    function copyAll(buttonElement) {
+        const card = buttonElement.closest('.suggestion-cube');
+        const filename = card.querySelectorAll('.data-field .text-white\\/80')[0].textContent;
+        const folder = card.querySelectorAll('.data-field .text-white\\/80')[1].textContent;
+        const keywords = card.querySelectorAll('.data-field .text-white\\/80')[2].textContent;
+
+        const textToCopy = `FILENAME: ${filename}\nPATH: ${folder}\nTAGS: ${keywords}`;
+        
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showMessage("DATA COPIED", "success");
+        }).catch(err => {
+            showMessage("COPY FAILED", "error");
+        });
+    }
+
+    function showMessage(message, type = "info") {
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+        messageText.textContent = message;
+        
+        messageBox.classList.remove('hidden');
+        
+        setTimeout(() => { 
+            messageBox.classList.add('hidden');
+        }, 3000);
+    }
+</script>
+```
+
+</body>
+</html>
