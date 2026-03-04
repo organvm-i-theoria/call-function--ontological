@@ -45,6 +45,10 @@ EXCLUDE_PATTERNS = [
     r'^README.*',
     r'^LICENSE.*',
     r'^CLAUDE\.md$',  # Claude Code config file
+    r'^GEMINI\.md$',  # Gemini CLI config file
+    r'^AGENTS\.md$',  # AI Agents guidelines
+    r'^seed\.yaml$',  # Project seed metadata
+    r'^sexy_metadata_engine\.html$',  # Legacy metadata tool
     r'^Makefile$',
     r'^.*\.meta\.json$',  # Metadata sidecars validated separately
     r'^\.gitkeep$',
