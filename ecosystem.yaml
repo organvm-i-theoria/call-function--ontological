@@ -1,0 +1,9 @@
+schema_version: '1.0'
+repo: call-function--ontological
+organ: I
+display_name: "Ontological function-calling framework \u2014 12-concept philosophical\
+  \ architecture for grounded AI tool use via Heideggerian Dasein, Aristotelian four\
+  \ causes, and Peircean semiotics"
+delivery:
+- platform: web_app
+  status: not_started
