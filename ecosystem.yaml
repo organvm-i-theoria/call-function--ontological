@@ -1,9 +1,23 @@
 schema_version: '1.0'
 repo: call-function--ontological
 organ: I
-display_name: "Ontological function-calling framework \u2014 12-concept philosophical\
-  \ architecture for grounded AI tool use via Heideggerian Dasein, Aristotelian four\
-  \ causes, and Peircean semiotics"
+display_name: "Ontological function-calling framework — 12-concept philosophical architecture for grounded AI tool use"
+
 delivery:
-- platform: web_app
+- platform: python_library
+  status: in_progress
+  priority: critical
+  notes: "Python package: Heideggerian Dasein, Aristotelian four causes, Peircean semiotics"
+  next_action: "Complete core 12-concept API and write integration tests"
+
+content:
+- platform: docs_site
   status: not_started
+  priority: high
+  notes: "Map each of 12 philosophical concepts to concrete function-calling patterns"
+  next_action: "Write concept reference with code examples"
+- platform: academic_writing
+  status: planned
+  priority: high
+  notes: "Paper on ontological grounding for AI tool use"
+  next_action: "Draft abstract connecting philosophical ontology to function calling"
