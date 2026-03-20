@@ -1,0 +1,22 @@
+name: Stale Issues and PRs
+on:
+  schedule:
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+permissions:
+  issues: write
+  pull-requests: write
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          stale-issue-message: 'Marked stale due to inactivity. Will close in 14 days.'
+          stale-pr-message: 'Marked stale due to inactivity. Will close in 14 days.'
+          days-before-stale: 60
+          days-before-close: 14
+          exempt-issue-labels: 'pinned,evergreen,omega,blocked'
+          exempt-pr-labels: 'pinned,evergreen,work-in-progress'
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'
