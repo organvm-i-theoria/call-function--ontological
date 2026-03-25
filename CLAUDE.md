@@ -92,12 +92,12 @@ Example: `[breath:agent] improve inference — caching`
 - **Produces** → `unspecified`: theory
 
 ### Siblings in Theory
-`recursive-engine--generative-entity`, `organon-noumenon--ontogenetic-morphe`, `auto-revision-epistemic-engine`, `narratological-algorithmic-lenses`, `sema-metra--alchemica-mundi`, `cognitive-archaelogy-tribunal`, `a-recursive-root`, `radix-recursiva-solve-coagula-redi`, `.github`, `nexus--babel-alexandria`, `4-ivi374-F0Rivi4`, `cog-init-1-0-`, `linguistic-atomization-framework`, `my-knowledge-base`, `scalable-lore-expert` ... and 5 more
+`recursive-engine--generative-entity`, `organon-noumenon--ontogenetic-morphe`, `auto-revision-epistemic-engine`, `narratological-algorithmic-lenses`, `sema-metra--alchemica-mundi`, `cognitive-archaelogy-tribunal`, `a-recursive-root`, `radix-recursiva-solve-coagula-redi`, `.github`, `nexus--babel-alexandria`, `4-ivi374-F0Rivi4`, `cog-init-1-0-`, `linguistic-atomization-framework`, `my-knowledge-base`, `scalable-lore-expert` ... and 6 more
 
 ### Governance
 - Foundational theory layer. No upstream dependencies.
 
-*Last synced: 2026-03-21T13:20:55Z*
+*Last synced: 2026-03-25T22:27:05Z*
 
 ## Session Review Protocol
 
@@ -193,31 +193,31 @@ Resolve: `organvm ontologia resolve call-function--ontological` | History: `orga
 
 | Variable | Value | Scope | Updated |
 |----------|-------|-------|---------|
-| `active_repos` | 62 | global | 2026-03-21 |
-| `archived_repos` | 53 | global | 2026-03-21 |
-| `ci_workflows` | 104 | global | 2026-03-21 |
-| `code_files` | 23121 | global | 2026-03-21 |
-| `dependency_edges` | 55 | global | 2026-03-21 |
-| `operational_organs` | 8 | global | 2026-03-21 |
-| `published_essays` | 0 | global | 2026-03-21 |
-| `repos_with_tests` | 47 | global | 2026-03-21 |
-| `sprints_completed` | 0 | global | 2026-03-21 |
-| `test_files` | 4337 | global | 2026-03-21 |
-| `total_organs` | 8 | global | 2026-03-21 |
-| `total_repos` | 116 | global | 2026-03-21 |
-| `total_words_formatted` | 740,907 | global | 2026-03-21 |
-| `total_words_numeric` | 740907 | global | 2026-03-21 |
-| `total_words_short` | 741K+ | global | 2026-03-21 |
+| `active_repos` | 64 | global | 2026-03-25 |
+| `archived_repos` | 54 | global | 2026-03-25 |
+| `ci_workflows` | 106 | global | 2026-03-25 |
+| `code_files` | 0 | global | 2026-03-25 |
+| `dependency_edges` | 60 | global | 2026-03-25 |
+| `operational_organs` | 8 | global | 2026-03-25 |
+| `published_essays` | 29 | global | 2026-03-25 |
+| `repos_with_tests` | 0 | global | 2026-03-25 |
+| `sprints_completed` | 33 | global | 2026-03-25 |
+| `test_files` | 0 | global | 2026-03-25 |
+| `total_organs` | 8 | global | 2026-03-25 |
+| `total_repos` | 127 | global | 2026-03-25 |
+| `total_words_formatted` | 0 | global | 2026-03-25 |
+| `total_words_numeric` | 0 | global | 2026-03-25 |
+| `total_words_short` | 0K+ | global | 2026-03-25 |
 
-Metrics: 9 registered | Observations: 8632 recorded
+Metrics: 9 registered | Observations: 15536 recorded
 Resolve: `organvm ontologia status` | Refresh: `organvm refresh`
 
 
 ## System Density (auto-generated)
 
-AMMOI: 54% | Edges: 28 | Tensions: 33 | Clusters: 5 | Adv: 3 | Events(24h): 14977
-Structure: 8 organs / 117 repos / 1654 components (depth 17) | Inference: 98% | Organs: META-ORGANVM:66%, ORGAN-I:55%, ORGAN-II:47%, ORGAN-III:56% +4 more
-Last pulse: 2026-03-21T13:20:54 | Δ24h: n/a | Δ7d: n/a
+AMMOI: 56% | Edges: 41 | Tensions: 33 | Clusters: 5 | Adv: 7 | Events(24h): 23754
+Structure: 8 organs / 127 repos / 1654 components (depth 17) | Inference: 98% | Organs: META-ORGANVM:64%, ORGAN-I:55%, ORGAN-II:47%, ORGAN-III:55% +4 more
+Last pulse: 2026-03-25T22:27:04 | Δ24h: +3.5% | Δ7d: n/a
 
 
 ## Dialect Identity (Trivium)
