@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ontological Envelopes — Directory Systems Diagrammatics</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --fg: #d4d4d8;
+    --fg-dim: #71717a;
+    --accent-editorial: #e94560;
+    --accent-bureaucratic: #4ecdc4;
+    --accent-transparent: #f9ca24;
+    --accent-generic: #a78bfa;
+    --accent-break: #ef4444;
+    --border: #27272a;
+    --card-bg: #111118;
+    --layer-0: #1a0a0a;
+    --layer-1: #0a1a1a;
+    --layer-2: #0a0a1a;
+    --layer-3: #1a1a0a;
+    --layer-4: #1a0a1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fg);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+  }
+  h2 {
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 3rem 0 1.5rem;
+    color: var(--fg-dim);
+  }
+  h2 .num { color: var(--accent-generic); }
+  h3 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.5rem;
+    color: var(--fg);
+  }
+  p, li { color: var(--fg-dim); margin-bottom: 0.5rem; }
+  .subtitle {
+    font-size: 0.8rem;
+    color: var(--fg-dim);
+    margin-top: -1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Diagram containers ── */
+  .diagram-section {
+    margin: 2rem 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .diagram-title {
+    background: var(--card-bg);
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    color: var(--fg-dim);
+  }
+  .diagram-body {
+    padding: 2rem;
+    background: var(--bg);
+    overflow-x: auto;
+  }
+
+  /* ── Layer diagrams ── */
+  .layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .layer {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    min-height: 60px;
+  }
+  .layer-label {
+    padding: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .layer-content {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--fg-dim);
+  }
+  .layer-content strong { color: var(--fg); font-weight: 500; }
+  .layer-content .tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-size: 0.65rem;
+    margin: 1px;
+    border: 1px solid;
+  }
+
+  /* Layer colors */
+  .l-sealed .layer-label { background: #1a0505; color: var(--accent-break); }
+  .l-extension .layer-label { background: #05101a; color: var(--accent-bureaucratic); }
+  .l-visible .layer-label { background: #0a0a1a; color: var(--accent-generic); }
+  .l-mechanism .layer-label { background: #100a1a; color: #c084fc; }
+  .l-ungoverned .layer-label { background: #1a1505; color: var(--accent-transparent); }
+
+  /* ── Comparison grid ── */
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 1000px) {
+    .comparison-grid { grid-template-columns: 1fr; }
+  }
+  .system-col {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .system-col-header {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .col-editorial .system-col-header { background: #1a050a; color: var(--accent-editorial); border-bottom-color: #3d0f1a; }
+  .col-bureaucratic .system-col-header { background: #051a15; color: var(--accent-bureaucratic); border-bottom-color: #0f3d2d; }
+  .col-transparent .system-col-header { background: #1a1a05; color: var(--accent-transparent); border-bottom-color: #3d3d0f; }
+
+  .system-col .row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    border-bottom: 1px solid #1a1a1f;
+    font-size: 0.7rem;
+  }
+  .system-col .row:last-child { border-bottom: none; }
+  .system-col .row-label {
+    padding: 0.5rem;
+    background: #0f0f14;
+    color: var(--fg-dim);
+    font-weight: 500;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-right: 1px solid #1a1a1f;
+    display: flex;
+    align-items: center;
+  }
+  .system-col .row-value {
+    padding: 0.5rem;
+    color: var(--fg-dim);
+    line-height: 1.4;
+  }
+  .system-col .row-value em { color: var(--fg); font-style: normal; font-weight: 500; }
+
+  /* ── Flow diagrams (SVG-based) ── */
+  .flow-container {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+  }
+  svg text {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* ── ASCII diagrams ── */
+  .ascii-diagram {
+    font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.35;
+    white-space: pre;
+    overflow-x: auto;
+    color: var(--fg-dim);
+    padding: 1.5rem;
+  }
+  .ascii-diagram .hl-editorial { color: var(--accent-editorial); }
+  .ascii-diagram .hl-bureaucratic { color: var(--accent-bureaucratic); }
+  .ascii-diagram .hl-transparent { color: var(--accent-transparent); }
+  .ascii-diagram .hl-generic { color: var(--accent-generic); }
+  .ascii-diagram .hl-break { color: var(--accent-break); }
+  .ascii-diagram .hl-dim { color: #52525b; }
+  .ascii-diagram .hl-bright { color: #e4e4e7; }
+
+  /* ── Interaction matrix ── */
+  .matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.7rem;
+  }
+  .matrix th {
+    background: var(--card-bg);
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 500;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.65rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .matrix td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #1a1a1f;
+    color: var(--fg-dim);
+    vertical-align: top;
+  }
+  .matrix td:first-child {
+    font-weight: 500;
+    color: var(--fg);
+    white-space: nowrap;
+  }
+  .matrix .yes { color: #22c55e; }
+  .matrix .no { color: #ef4444; }
+  .matrix .partial { color: #f59e0b; }
+  .matrix .na { color: #52525b; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 1rem;
+    font-size: 0.7rem;
+    border-top: 1px solid var(--border);
+    background: var(--card-bg);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Ontological Envelopes — Directory Systems Diagrammatics</h1>
+<p class="subtitle">Generic structural comparison of three directory governance architectures. Non-branded.</p>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">I.</span> The Generic Envelope Model</h2>
+<p>All three systems share a common five-layer architecture. They differ in how each layer is instantiated, governed, and enforced.</p>
+
+<div class="diagram-section">
+  <div class="diagram-title">Universal Layer Architecture</div>
+  <div class="diagram-body">
+    <div class="layer-stack">
+
+      <div class="layer l-sealed">
+        <div class="layer-label">Layer 0<br>Sealed<br>Substrate</div>
+        <div class="layer-content">
+          <strong>Governor:</strong> Vendor exclusively &nbsp;|&nbsp; <strong>Membrane:</strong> Cryptographic seal or integrity protection<br>
+          <strong>Mutability:</strong> None (or admin-only with integrity checks) &nbsp;|&nbsp; <strong>Durability:</strong> Replaced atomically by vendor updates<br>
+          <strong>Principle:</strong> The system-as-distributed is the ground truth. No drift permitted between intention and state.
+        </div>
+      </div>
+
+      <div class="layer l-extension">
+        <div class="layer-label">Layer 1<br>Extension<br>Layer</div>
+        <div class="layer-content">
+          <strong>Governor:</strong> Administrator &nbsp;|&nbsp; <strong>Membrane:</strong> Privilege escalation (sudo, UAC, admin prompt)<br>
+          <strong>Mutability:</strong> Admin-gated &nbsp;|&nbsp; <strong>Durability:</strong> Persists across reboots, survives user changes<br>
+          <strong>Principle:</strong> Machine-wide additions that do not modify vendor layer. Third-party software lives here.
+        </div>
+      </div>
+
+      <div class="layer l-visible">
+        <div class="layer-label">Layer 2a<br>Visible<br>Surface</div>
+        <div class="layer-content">
+          <strong>Governor:</strong> User (intentional acts) &nbsp;|&nbsp; <strong>Membrane:</strong> Login + access gates<br>
+          <strong>Sub-envelopes:</strong>
+          <span class="tag" style="border-color:#a78bfa;color:#a78bfa">Presentation</span>
+          <span class="tag" style="border-color:#a78bfa;color:#a78bfa">Artifacts</span>
+          <span class="tag" style="border-color:#a78bfa;color:#a78bfa">Ingress</span>
+          <span class="tag" style="border-color:#a78bfa;color:#a78bfa">Material Buckets</span>
+          <span class="tag" style="border-color:#a78bfa;color:#a78bfa">Sharing Surface</span><br>
+          <strong>Principle:</strong> What the user sees and directly manages. User-owned, user-named, user-organized.
+        </div>
+      </div>
+
+      <div class="layer l-mechanism">
+        <div class="layer-label">Layer 2b<br>Hidden<br>Mechanism</div>
+        <div class="layer-content">
+          <strong>Governor:</strong> Applications (programmatic) &nbsp;|&nbsp; <strong>Membrane:</strong> Hidden from casual view<br>
+          <strong>Sub-envelopes:</strong>
+          <span class="tag" style="border-color:#c084fc;color:#c084fc">Disposition</span>
+          <span class="tag" style="border-color:#c084fc;color:#c084fc">Capacity</span>
+          <span class="tag" style="border-color:#c084fc;color:#c084fc">Accident</span><br>
+          <strong>Principle:</strong> What apps need to function. Not user-facing. Classified by durability and portability.
+        </div>
+      </div>
+
+      <div class="layer l-ungoverned">
+        <div class="layer-label">Layer 3<br>Ungoverned<br>Stratum</div>
+        <div class="layer-content">
+          <strong>Governor:</strong> NONE &nbsp;|&nbsp; <strong>Membrane:</strong> NONE<br>
+          <strong>Mutability:</strong> Unrestricted by any convention &nbsp;|&nbsp; <strong>Durability:</strong> Permanent until manually removed<br>
+          <strong>Principle:</strong> Tool configuration, CLI state, language toolchains. The orphan layer that every system has and none governs.
+          <span class="tag" style="border-color:#ef4444;color:#ef4444">ALL THREE SYSTEMS FAIL HERE</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--accent-break)"></div> Sealed Substrate</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--accent-bureaucratic)"></div> Extension Layer</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--accent-generic)"></div> Visible Surface</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#c084fc"></div> Hidden Mechanism</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:var(--accent-transparent)"></div> Ungoverned Stratum</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">II.</span> Three Instantiations</h2>
+<p>Same model, three governance philosophies. Each column shows how one system fills the generic layers.</p>
+
+<div class="diagram-section">
+  <div class="diagram-title">Comparative Instantiation</div>
+  <div class="diagram-body">
+    <div class="comparison-grid">
+
+      <!-- EDITORIAL -->
+      <div class="system-col col-editorial">
+        <div class="system-col-header">Editorial System<br><span style="font-weight:300;font-size:0.65rem;letter-spacing:0">The Curated Museum</span></div>
+        <div class="row"><div class="row-label">Sealed</div><div class="row-value"><em>Crypto-sealed snapshot.</em> Vendor-signed, hash-verified at every block read. No process can write — including root.</div></div>
+        <div class="row"><div class="row-label">Extension</div><div class="row-value"><em>Admin-gated directories</em> for machine-wide apps and libraries. Package manager uses a vendor-specific alternative path on newer hardware.</div></div>
+        <div class="row"><div class="row-label">Visible</div><div class="row-value"><em>8 provisioned directories:</em> Presentation, Artifacts, Ingress, 3 Material Buckets, Sharing Surface, Hidden Mechanism. Vendor assigns magic icons.</div></div>
+        <div class="row"><div class="row-label">Mechanism</div><div class="row-value"><em>Hidden since 2011.</em> Three sub-envelopes: Disposition (API-managed, never hand-edit), Capacity (per-app data), Accident (expendable, system may purge).</div></div>
+        <div class="row"><div class="row-label">Ungoverned</div><div class="row-value"><em>Dotfile stratum.</em> Perceptual membrane hides all dot-prefixed entries. System pretends this layer does not exist. Zero governance.</div></div>
+        <div class="row"><div class="row-label">Truth</div><div class="row-value"><em>Proprietary APIs.</em> Filesystem is storage only. System state accessed through framework calls, not file reads.</div></div>
+        <div class="row"><div class="row-label">Mediators</div><div class="row-value">Perceptual Lens (curates view) · Access Gate (per-app per-dir) · Locality Dissolver (cloud sync of Artifacts + Presentation)</div></div>
+      </div>
+
+      <!-- BUREAUCRATIC -->
+      <div class="system-col col-bureaucratic">
+        <div class="system-col-header">Bureaucratic System<br><span style="font-weight:300;font-size:0.65rem;letter-spacing:0">The Registry Kingdom</span></div>
+        <div class="row"><div class="row-label">Sealed</div><div class="row-value"><em>ACL-guarded, not sealed.</em> Integrity protection via resource protection service. Mutable in principle — guarded, not immutable.</div></div>
+        <div class="row"><div class="row-label">Extension</div><div class="row-value"><em>Two paths:</em> vendor-namespaced program dirs (per-architecture) and machine-wide data dir. Admin + elevation prompt required.</div></div>
+        <div class="row"><div class="row-label">Visible</div><div class="row-value"><em>12+ provisioned directories</em> (7 active, 5+ legacy). Abstracted via GUID system — paths are indirected, never hardcoded. Cloud service can absorb Artifacts + Presentation.</div></div>
+        <div class="row"><div class="row-label">Mechanism</div><div class="row-value"><em>Three-tier model</em> classified by portability: Roaming (follows user across machines), Local (machine-specific), Low (sandboxed process). Most precise classification of the three systems.</div></div>
+        <div class="row"><div class="row-label">Ungoverned</div><div class="row-value"><em>Dotfile stratum.</em> No enforcement. No convention. Unix-origin tools dump dotfiles in profile root. System has no opinion.</div></div>
+        <div class="row"><div class="row-label">Truth</div><div class="row-value"><em>Hierarchical binary database.</em> Hardware, services, config, app registration all in one opaque store. Filesystem and database can disagree.</div></div>
+        <div class="row"><div class="row-label">Mediators</div><div class="row-value">Perceptual Lens (curates + localizes) · Elevation Gate (per-action) · Locality Dissolver (folder redirection / cloud KFM)</div></div>
+      </div>
+
+      <!-- TRANSPARENT -->
+      <div class="system-col col-transparent">
+        <div class="system-col-header">Transparent System<br><span style="font-weight:300;font-size:0.65rem;letter-spacing:0">The Self-Describing Machine</span></div>
+        <div class="row"><div class="row-label">Sealed</div><div class="row-value"><em>Package-managed, optionally immutable.</em> Traditionally mutable; immutable-root variants seal it as versioned artifact. Content-addressed variants make paths intrinsic.</div></div>
+        <div class="row"><div class="row-label">Extension</div><div class="row-value"><em>Two models:</em> integrated hierarchy (admin-compiled, mirrors system structure) vs self-contained bundles (vendor-owned subtrees). Package manager governs both.</div></div>
+        <div class="row"><div class="row-label">Visible</div><div class="row-value"><em>NO provisioned directories.</em> Home dir is empty. User creates own structure. Specification exists (voluntary) but system enforces nothing.</div></div>
+        <div class="row"><div class="row-label">Mechanism</div><div class="row-value"><em>Voluntary specification</em> separating config, data, state, cache, runtime. Precise semantics but zero enforcement. Compliance is cultural, not technical.</div></div>
+        <div class="row"><div class="row-label">Ungoverned</div><div class="row-value"><em>Dotfile stratum.</em> Largest of the three — includes all non-spec-compliant tools. Home directory is a contested zone between spec and legacy.</div></div>
+        <div class="row"><div class="row-label">Truth</div><div class="row-value"><em>The filesystem itself.</em> Processes = files. Hardware = files. Config = files. Being and description are unified. Filesystem IS the system API.</div></div>
+        <div class="row"><div class="row-label">Mediators</div><div class="row-value">Perceptual Lens (optional, desktop-dependent) · POSIX permissions (coarse) · <em>Kernel namespaces</em> (true isolation — unique to this system)</div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">III.</span> Governance Flow — Authority Through Layers</h2>
+<p>Who governs what, and how authority attenuates from vendor seal to ungoverned void.</p>
+
+<div class="diagram-section">
+  <div class="diagram-title">Governance Gradient</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram"><span class="hl-bright">AUTHORITY</span>                         <span class="hl-bright">EDITORIAL</span>          <span class="hl-bright">BUREAUCRATIC</span>       <span class="hl-bright">TRANSPARENT</span>
+<span class="hl-dim">────────────────────────────────────────────────────────────────────────────────────</span>
+
+<span class="hl-break">VENDOR</span>                            Crypto seal         ACL + WRP            Package manager
+<span class="hl-break">EXCLUSIVE</span>   ██████████████████    (immutable)         (mutable but          (mutable; optionally
+            <span class="hl-dim">strongest</span>                                  guarded)              immutable-root)
+                │                         │                  │                    │
+                ▼                         ▼                  ▼                    ▼
+<span class="hl-bureaucratic">ADMIN</span>                             Privilege gate      UAC elevation        sudo / root
+<span class="hl-bureaucratic">GATED</span>       ████████████████      (sudo/admin)        prompt               privilege
+            <span class="hl-dim">strong</span>
+                │                         │                  │                    │
+                ▼                         ▼                  ▼                    ▼
+<span class="hl-generic">USER</span>                              Login + TCC         Login + ACL          Login + POSIX
+<span class="hl-generic">GOVERNED</span>    ██████████████        (per-app             (GUID-indirected     (spec-governed
+            <span class="hl-dim">moderate</span>               per-directory)       per-profile)          but voluntary)
+                │                         │                  │                    │
+                ▼                         ▼                  ▼                    ▼
+<span class="hl-generic">APP</span>                               Hidden mechanism    Three-tier split     Voluntary spec
+<span class="hl-generic">MANAGED</span>     ██████████            (hidden from         (Roaming / Local     (~/.config, ~/.local
+            <span class="hl-dim">weak</span>                   Finder, API-         / Low integrity)      ~/.cache — honored
+                                      mediated)                                  by ~60% of tools)
+                │                         │                  │                    │
+                ▼                         ▼                  ▼                    ▼
+<span class="hl-transparent">UN-</span>                               Dotfiles            Dotfiles             Dotfiles
+<span class="hl-transparent">GOVERNED</span>    <span class="hl-break">░░░░░░░░░░</span>            (hidden by           (visible, no         (visible, no
+            <span class="hl-break">ZERO</span>                   perceptual           convention)          enforcement)
+                                      membrane)
+<span class="hl-dim">────────────────────────────────────────────────────────────────────────────────────</span>
+<span class="hl-dim">                                  ▲                  ▲                    ▲</span>
+<span class="hl-dim">                                  │                  │                    │</span>
+<span class="hl-dim">                            HIDES the gap      IGNORES the gap    SPECIFIES but</span>
+<span class="hl-dim">                                                                  CANNOT ENFORCE</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">IV.</span> Where Truth Lives — The Self-Description Divergence</h2>
+<p>The fundamental ontological split: whether the filesystem describes the system, or merely stores data for it.</p>
+
+<div class="diagram-section">
+  <div class="diagram-title">Self-Description Architecture</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">QUERY: "What hardware exists?" / "What services are running?" / "How is X configured?"</span>
+
+<span class="hl-dim">─── EDITORIAL SYSTEM ──────────────────────────────────────────────────────────</span>
+
+    <span class="hl-editorial">Question ──→ Proprietary API call ──→ Framework (opaque) ──→ Answer</span>
+                         │
+                    <span class="hl-dim">Filesystem is</span>           <span class="hl-editorial">IOKit, NSUserDefaults,</span>
+                    <span class="hl-dim">NOT consulted</span>           <span class="hl-editorial">launchd, SystemConfig</span>
+                                             <span class="hl-editorial">are the oracles</span>
+
+    <span class="hl-dim">Filesystem role: STORAGE ONLY</span>
+    <span class="hl-dim">Truth and storage are SEPARATE systems</span>
+
+
+<span class="hl-dim">─── BUREAUCRATIC SYSTEM ───────────────────────────────────────────────────────</span>
+
+    <span class="hl-bureaucratic">Question ──→ Registry API call ──→ Binary database ──→ Answer</span>
+                         │
+                    <span class="hl-dim">Filesystem is</span>           <span class="hl-bureaucratic">HKLM\SYSTEM\Enum (hardware)</span>
+                    <span class="hl-dim">NOT consulted</span>           <span class="hl-bureaucratic">HKLM\SYSTEM\Services (services)</span>
+                                             <span class="hl-bureaucratic">HKCU\Software (user config)</span>
+
+    <span class="hl-dim">Filesystem role: STORAGE ONLY</span>
+    <span class="hl-dim">Truth and storage are SEPARATE — and can DISAGREE</span>
+    <span class="hl-break">    ⚠ Registry says X exists; filesystem says it doesn't → inconsistent state</span>
+
+
+<span class="hl-dim">─── TRANSPARENT SYSTEM ────────────────────────────────────────────────────────</span>
+
+    <span class="hl-transparent">Question ──→ Read a file ──→ Answer</span>
+
+       <span class="hl-transparent">/proc/[pid]/status</span>   = process state     <span class="hl-dim">(kernel generates on read)</span>
+       <span class="hl-transparent">/sys/class/net/*/</span>    = network interfaces <span class="hl-dim">(kernel generates on read)</span>
+       <span class="hl-transparent">/sys/block/sda/</span>      = disk topology      <span class="hl-dim">(kernel generates on read)</span>
+       <span class="hl-transparent">/etc/hostname</span>        = machine identity   <span class="hl-dim">(text file, human-edited)</span>
+
+    <span class="hl-dim">Filesystem role: STORAGE + SELF-DESCRIPTION UNIFIED</span>
+    <span class="hl-dim">Being and description are the SAME system</span>
+    <span class="hl-dim">The file IS the API. No intermediary.</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">V.</span> Data Flow — How Objects Move Through Envelopes</h2>
+<p>Five canonical data flows and how each system routes them.</p>
+
+<div class="diagram-section">
+  <div class="diagram-title">Canonical Flows</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">FLOW 1: DOWNLOAD (external → user space)</span>
+<span class="hl-dim">────────────────────────────────────────────</span>
+  EDITORIAL      network ──→ <span class="hl-editorial">Ingress + quarantine xattr</span> ──→ user opens ──→ <span class="hl-editorial">integrity gate verifies</span> ──→ admitted
+  BUREAUCRATIC   network ──→ <span class="hl-bureaucratic">Ingress directory</span> ──→ user opens ──→ <span class="hl-bureaucratic">SmartScreen verifies</span> ──→ admitted
+  TRANSPARENT    network ──→ <span class="hl-transparent">no canonical ingress</span> ──→ <span class="hl-transparent">lands wherever user/tool specifies</span> ──→ no verification gate
+
+<span class="hl-bright">FLOW 2: SAVE (user intent → persistent artifact)</span>
+<span class="hl-dim">────────────────────────────────────────────</span>
+  EDITORIAL      Save dialog ──→ <span class="hl-editorial">Artifact Store (default)</span> ──→ cloud sync may replicate ──→ local copy may evict
+  BUREAUCRATIC   Save dialog ──→ <span class="hl-bureaucratic">Artifact Store (default, GUID-resolved)</span> ──→ cloud KFM may redirect ──→ cloud replica
+  TRANSPARENT    Save dialog ──→ <span class="hl-transparent">wherever user specifies (no default convention)</span>
+
+<span class="hl-bright">FLOW 3: APP STATE (application → mechanism layer)</span>
+<span class="hl-dim">────────────────────────────────────────────</span>
+  EDITORIAL      app ──→ <span class="hl-editorial">API call (NSUserDefaults)</span> ──→ daemon coalesces ──→ plist in hidden Disposition
+                 app ──→ <span class="hl-editorial">direct write</span> ──→ hidden Capacity (per-bundle-ID)
+                 app ──→ <span class="hl-editorial">direct write</span> ──→ hidden Accident (expendable, system-purgeable)
+  BUREAUCRATIC   app ──→ <span class="hl-bureaucratic">direct write</span> ──→ Roaming (portable config)
+                 app ──→ <span class="hl-bureaucratic">direct write</span> ──→ Local (machine-specific)
+                 app ──→ <span class="hl-bureaucratic">direct write</span> ──→ Low (sandboxed process data)
+  TRANSPARENT    app ──→ <span class="hl-transparent">direct write</span> ──→ spec-compliant: ~/.config or ~/.local/share or ~/.cache
+                 app ──→ <span class="hl-transparent">direct write</span> ──→ non-compliant: ~/.appname (ungoverned)
+
+<span class="hl-bright">FLOW 4: TOOL CONFIG (CLI tool → ??? layer)</span>
+<span class="hl-dim">────────────────────────────────────────────</span>
+  EDITORIAL      tool ──→ <span class="hl-break">~/.toolname or ~/.config/tool/</span> ──→ <span class="hl-break">UNGOVERNED</span> ──→ hidden by perceptual membrane
+  BUREAUCRATIC   tool ──→ <span class="hl-break">%USERPROFILE%\.toolname</span> ──→ <span class="hl-break">UNGOVERNED</span> ──→ visible, no convention
+  TRANSPARENT    tool ──→ <span class="hl-break">~/.toolname or ~/.config/tool/</span> ──→ <span class="hl-break">UNGOVERNED or SPEC</span> ──→ mixed compliance
+
+  <span class="hl-break">⚠ ALL THREE SYSTEMS: identical failure. No envelope exists for tool configuration.</span>
+
+<span class="hl-bright">FLOW 5: SYSTEM UPDATE (vendor → sealed substrate)</span>
+<span class="hl-dim">────────────────────────────────────────────</span>
+  EDITORIAL      vendor image ──→ <span class="hl-editorial">atomic snapshot replacement</span> ──→ old snapshot discarded ──→ seal recomputed
+  BUREAUCRATIC   vendor update ──→ <span class="hl-bureaucratic">in-place mutation</span> ──→ files overwritten ──→ reboot to complete
+  TRANSPARENT    package mgr  ──→ <span class="hl-transparent">in-place mutation (traditional)</span>
+                 ostree/image ──→ <span class="hl-transparent">atomic commit swap (immutable-root)</span>
+                 nix/guix     ──→ <span class="hl-transparent">new store paths + profile symlink swap (content-addressed)</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">VI.</span> The Mechanism Layer — Three Taxonomies</h2>
+<p>Where app-managed data lives. Each system classifies it by a different axis.</p>
+
+<div class="diagram-section">
+  <div class="diagram-title">Hidden Mechanism Sub-Envelope Comparison</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-editorial">EDITORIAL: Classified by DATA TYPE</span>
+<span class="hl-dim">─────────────────────────────────────────</span>
+  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐
+  │ <span class="hl-editorial">DISPOSITION</span>    │  │ <span class="hl-editorial">CAPACITY</span>      │  │ <span class="hl-editorial">ACCIDENT</span>      │
+  │ (Preferences)  │  │ (App Support)  │  │ (Caches)       │
+  │                │  │                │  │                │
+  │ How apps       │  │ What apps      │  │ Computed data  │
+  │ behave.        │  │ accumulate.    │  │ that can be    │
+  │ API-managed.   │  │ Durable.       │  │ regenerated.   │
+  │ Never edit.    │  │ Back up.       │  │ Expendable.    │
+  └───────────────┘  └───────────────┘  └───────────────┘
+  <span class="hl-dim">Axis: WHAT kind of data is this?</span>
+
+
+<span class="hl-bureaucratic">BUREAUCRATIC: Classified by PORTABILITY × TRUST</span>
+<span class="hl-dim">─────────────────────────────────────────</span>
+  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐
+  │ <span class="hl-bureaucratic">ROAMING</span>        │  │ <span class="hl-bureaucratic">LOCAL</span>          │  │ <span class="hl-bureaucratic">LOW</span>            │
+  │                │  │                │  │                │
+  │ Follows user   │  │ Machine-       │  │ Sandboxed      │
+  │ across         │  │ specific.      │  │ processes.     │
+  │ machines.      │  │ Caches, large  │  │ Low integrity  │
+  │ Must be small. │  │ data, HW-      │  │ level. Cannot  │
+  │ Traverses      │  │ dependent.     │  │ write to       │
+  │ network.       │  │ Regenerable.   │  │ higher tiers.  │
+  └───────────────┘  └───────────────┘  └───────────────┘
+  <span class="hl-dim">Axis: WHERE should this data GO and WHO can write it?</span>
+
+
+<span class="hl-transparent">TRANSPARENT: Classified by LIFECYCLE</span>
+<span class="hl-dim">─────────────────────────────────────────</span>
+  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐
+  │ <span class="hl-transparent">CONFIG</span>   │  │ <span class="hl-transparent">DATA</span>     │  │ <span class="hl-transparent">STATE</span>    │  │ <span class="hl-transparent">CACHE</span>    │  │ <span class="hl-transparent">RUNTIME</span>  │
+  │ ~/.config│  │ ~/.local │  │ ~/.local │  │ ~/.cache │  │ /run/    │
+  │          │  │ /share   │  │ /state   │  │          │  │ user/$UID│
+  │ Portable │  │ Durable  │  │ Persists │  │ Expend-  │  │ Session- │
+  │ Human-   │  │ Accumu-  │  │ across   │  │ able.    │  │ only.    │
+  │ edited.  │  │ lated.   │  │ restarts │  │ Regen-   │  │ Cleared  │
+  │ Back up. │  │ Back up. │  │ Not      │  │ erable.  │  │ at       │
+  │          │  │          │  │ critical │  │          │  │ logout.  │
+  └─────────┘  └─────────┘  └─────────┘  └─────────┘  └─────────┘
+  <span class="hl-dim">Axis: HOW LONG should this data persist and HOW IMPORTANT is it?</span>
+
+
+<span class="hl-dim">═══════════════════════════════════════════════════════════════</span>
+<span class="hl-bright">CROSS-MAPPING:</span>
+
+  <span class="hl-editorial">Disposition</span>    ≈  <span class="hl-bureaucratic">Roaming</span>   ≈  <span class="hl-transparent">Config</span>         <span class="hl-dim">(settings that define the user's experience)</span>
+  <span class="hl-editorial">Capacity</span>       ≈  <span class="hl-bureaucratic">Roaming</span>   ≈  <span class="hl-transparent">Data</span>           <span class="hl-dim">(accumulated resources — imprecise match)</span>
+  <span class="hl-editorial">Accident</span>       ≈  <span class="hl-bureaucratic">Local</span>     ≈  <span class="hl-transparent">Cache</span>          <span class="hl-dim">(expendable, machine-specific)</span>
+  <span class="hl-dim">(no equivalent)</span>   <span class="hl-bureaucratic">Low</span>       ≈  <span class="hl-dim">(no equivalent)</span>  <span class="hl-dim">(sandboxed process data — unique to Bureaucratic)</span>
+  <span class="hl-dim">(no equivalent)</span>   <span class="hl-dim">(no equiv)</span>  <span class="hl-transparent">State</span>          <span class="hl-dim">(persistent but non-critical — unique to Transparent)</span>
+  <span class="hl-dim">(no equivalent)</span>   <span class="hl-dim">(no equiv)</span>  <span class="hl-transparent">Runtime</span>        <span class="hl-dim">(session-scoped — unique to Transparent)</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">VII.</span> The Perceptual Membrane — What Users Actually See</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Perception vs Reality</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">RAW FILESYSTEM (what exists)          →  PERCEPTUAL MEMBRANE  →  USER SEES</span>
+<span class="hl-dim">══════════════════════════════════════════════════════════════════════════════</span>
+
+<span class="hl-editorial">EDITORIAL SYSTEM:</span>
+
+  ~/Desktop/                            <span class="hl-dim">───pass───→</span>              Desktop (icon)
+  ~/Documents/                          <span class="hl-dim">───pass───→</span>              Documents (icon)
+  ~/Downloads/                          <span class="hl-dim">───pass───→</span>              Downloads (icon)
+  ~/Library/                            <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(invisible)</span>
+  ~/Movies/                             <span class="hl-dim">───pass───→</span>              Movies (icon)
+  ~/Music/                              <span class="hl-dim">───pass───→</span>              Music (icon)
+  ~/Pictures/                           <span class="hl-dim">───pass───→</span>              Pictures (icon)
+  ~/Public/                             <span class="hl-dim">───pass───→</span>              Public (icon)
+  ~/.config/                            <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(invisible)</span>
+  ~/.ssh/                               <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(invisible)</span>
+  ~/.zshrc                              <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(invisible)</span>
+  ~/.cargo/                             <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(invisible)</span>
+  ~/my-project/                         <span class="hl-dim">───pass───→</span>              my-project (generic)
+  ~/Application.app                     <span class="hl-dim">──TRANSFIG→</span>              Application (icon, launchable)
+  <span class="hl-dim">"Documents" on disk</span>                   <span class="hl-dim">──LOCALIZE→</span>              <span class="hl-dim">"Documenten" (Dutch locale)</span>
+
+  <span class="hl-dim">Operations: HIDE (dotfiles, Library) · TRANSFIGURE (bundles→icons, localize names) · SUPPLEMENT (tags, Quick Look)</span>
+
+
+<span class="hl-bureaucratic">BUREAUCRATIC SYSTEM:</span>
+
+  Desktop\                              <span class="hl-dim">───pass───→</span>              Desktop (icon, merged with Public)
+  Documents\                            <span class="hl-dim">───pass───→</span>              Documents (icon, localized via desktop.ini)
+  Downloads\                            <span class="hl-dim">───pass───→</span>              Downloads (icon)
+  AppData\                              <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(hidden attribute)</span>
+  Music\                                <span class="hl-dim">───pass───→</span>              Music (icon)
+  Pictures\                             <span class="hl-dim">───pass───→</span>              Pictures (icon)
+  Videos\                               <span class="hl-dim">───pass───→</span>              Videos (icon)
+  Contacts\                             <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(hidden)</span>
+  Saved Games\                          <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(hidden)</span>
+  NTUSER.DAT                            <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(system+hidden)</span>
+  .gitconfig                            <span class="hl-dim">───pass───→</span>              <span class="hl-dim">.gitconfig (VISIBLE — no dot-hiding convention)</span>
+  OneDrive\                             <span class="hl-dim">──OVERLAY──→</span>              OneDrive (cloud overlay icons)
+
+  <span class="hl-dim">Operations: HIDE (Hidden attr, System attr) · LOCALIZE (desktop.ini resource strings) · OVERLAY (cloud state badges)</span>
+
+
+<span class="hl-transparent">TRANSPARENT SYSTEM (with desktop environment):</span>
+
+  Documents/                            <span class="hl-dim">───pass───→</span>              Documents
+  Downloads/                            <span class="hl-dim">───pass───→</span>              Downloads
+  .config/                              <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(hidden by dot convention)</span>
+  .local/                               <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(hidden)</span>
+  .cache/                               <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(hidden)</span>
+  .ssh/                                 <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(hidden)</span>
+  .bashrc                               <span class="hl-break">───HIDE───→</span>              <span class="hl-break">(hidden)</span>
+  snap/                                 <span class="hl-dim">───pass───→</span>              <span class="hl-dim">snap (VISIBLE — sandboxing pollution)</span>
+  my-project/                           <span class="hl-dim">───pass───→</span>              my-project
+
+  <span class="hl-dim">Operations: HIDE (dot prefix only) · minimal TRANSFIGURE · NO LOCALIZE</span>
+  <span class="hl-dim">Terminal is first-class — not an escape hatch. Both views are equally legitimate.</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">VIII.</span> What Breaks Each Model</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Failure Topology</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">STRUCTURAL FAILURES</span>
+<span class="hl-dim">══════════════════════════════════════════════════════════════════════════════</span>
+
+<span class="hl-editorial">EDITORIAL:</span>
+
+  ┌─ SEALED ─── <span class="hl-dim">intact</span> ─────────────────────────────────────────────────────┐
+  │  EXTENSION ─ <span class="hl-dim">intact</span> ───────────────────────────────────────────────────│
+  │  VISIBLE ─── <span class="hl-dim">intact</span> ───────────────────────────────────────────────────│
+  │  MECHANISM ─ <span class="hl-dim">intact</span> ───────────────────────────────────────────────────│
+  │  <span class="hl-break">UNGOVERNED ─ ████████████████████████████ THE DOTFILE SEAM</span>          │
+  │             <span class="hl-break"> System HIDES the gap. Does not acknowledge its existence.</span>  │
+  │             <span class="hl-break"> Unix tools dump state in ~/ with zero governance.</span>          │
+  │             <span class="hl-break"> Apple's ontology has no category for tool configuration.</span>   │
+  └────────────────────────────────────────────────────────────────────────┘
+  <span class="hl-break">ALSO: No kernel namespaces → cannot create enforced envelopes</span>
+  <span class="hl-break">ALSO: iCloud dissolves locality → file exists but may not be present</span>
+  <span class="hl-break">ALSO: Material buckets split projects by media type, not by purpose</span>
+
+
+<span class="hl-bureaucratic">BUREAUCRATIC:</span>
+
+  ┌─ <span class="hl-break">GUARDED (NOT SEALED) ─ ██████████ MUTABLE SUBSTRATE</span>               ┐
+  │  <span class="hl-break">System image writable. Integrity is ACL-based, not cryptographic.</span>  │
+  │  <span class="hl-break">No guarantee system-as-shipped = system-as-running.</span>               │
+  │  EXTENSION ─ <span class="hl-dim">intact</span> ───────────────────────────────────────────────│
+  │  VISIBLE ─── <span class="hl-dim">intact (strong GUID abstraction)</span> ─────────────────────│
+  │  MECHANISM ─ <span class="hl-dim">intact (most precise of the three)</span> ────────────────────│
+  │  <span class="hl-break">UNGOVERNED ─ ████████████████████████████ THE DOTFILE CHAOS</span>       │
+  │             <span class="hl-break"> System IGNORES the gap. No convention, no opinion.</span>        │
+  └────────────────────────────────────────────────────────────────────────┘
+  <span class="hl-break">ALSO: Registry/filesystem can disagree → inconsistent state</span>
+  <span class="hl-break">ALSO: No developer envelope (no GUID for dev tools)</span>
+  <span class="hl-break">ALSO: 30 years of backward-compat junction points → geological debt</span>
+
+
+<span class="hl-transparent">TRANSPARENT:</span>
+
+  ┌─ SEALED ─── <span class="hl-dim">varies (traditional: mutable; immutable-root: sealed)</span> ────┐
+  │  EXTENSION ─ <span class="hl-dim">intact</span> ───────────────────────────────────────────────────│
+  │  <span class="hl-break">VISIBLE ─── ████████████████████████████ NO PROVISIONED SURFACE</span>   │
+  │             <span class="hl-break"> System creates NOTHING in $HOME. Empty by default.</span>        │
+  │             <span class="hl-break"> User must build their own structure from scratch.</span>          │
+  │  <span class="hl-break">MECHANISM ─ ████████████████████████████ SPEC WITHOUT ENFORCEMENT</span> │
+  │             <span class="hl-break"> Voluntary specification. ~40% of tools ignore it.</span>         │
+  │             <span class="hl-break"> Home directory is a contested zone between spec and legacy.</span>│
+  │  <span class="hl-break">UNGOVERNED ─ ████████████████████████████ LARGEST OF THE THREE</span>    │
+  │             <span class="hl-break"> Spec-compliant AND non-compliant tools coexist.</span>           │
+  │             <span class="hl-break"> PLUS sandboxing systems create their own top-level dirs.</span>  │
+  └────────────────────────────────────────────────────────────────────────┘
+  <span class="hl-break">ALSO: "Everything is a file" philosophy does not extend to $HOME</span>
+  <span class="hl-break">ALSO: Flatpak/Snap create ~/snap, ~/.var/app → app-driven home pollution</span>
+
+<span class="hl-dim">══════════════════════════════════════════════════════════════════════════════</span>
+<span class="hl-bright">THE UNIVERSAL FAILURE:</span>
+<span class="hl-break">  All three systems govern the root hierarchy rigorously.</span>
+<span class="hl-break">  All three systems lose governance at the home directory boundary.</span>
+<span class="hl-break">  The home directory is where every operating system's ontology collapses.</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">IX.</span> The Mold-Breakers — Systems That Reject the Model</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Radical Alternatives</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">TRADITIONAL MODEL:</span>  Location is identity. /usr/bin/python = "the system's Python."
+                     Path encodes role. Hierarchy is taxonomy.
+
+<span class="hl-dim">── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ──</span>
+
+<span class="hl-transparent">MOLD-BREAKER 1: CONTENT-ADDRESSED STORE</span>
+
+  /store/&lt;HASH&gt;-python-3.11.7/bin/python
+
+  Path encodes <span class="hl-transparent">PROVENANCE</span>, not role.
+  Hash = f(source, dependencies, build flags).
+  Same inputs → same hash → same path on any machine.
+  Identity is <span class="hl-transparent">INTRINSIC</span> (content-determined), not <span class="hl-dim">POSITIONAL</span> (path-determined).
+  Multiple versions coexist. "Install" = symlink from profile to store path.
+  Updates are atomic. Rollbacks are instant. Garbage collection reclaims unused paths.
+
+  <span class="hl-dim">Breaks: FHS positional hierarchy. "Where you are" no longer means "what you are."</span>
+  <span class="hl-transparent">Extends to $HOME via declarative home manager → home directory becomes a derivation.</span>
+
+
+<span class="hl-generic">MOLD-BREAKER 2: KERNEL NAMESPACES (filesystem virtualization)</span>
+
+  ┌──────────────────────┐    ┌──────────────────────┐
+  │ <span class="hl-generic">NAMESPACE A</span>           │    │ <span class="hl-generic">NAMESPACE B</span>           │
+  │  /                    │    │  /                    │
+  │  ├── bin/             │    │  ├── bin/             │
+  │  ├── etc/             │    │  ├── etc/             │  ← <span class="hl-generic">Different /etc!</span>
+  │  ├── home/user/       │    │  ├── app/data/        │
+  │  └── ...              │    │  └── ...              │
+  └──────────┬───────────┘    └──────────┬───────────┘
+             │                            │
+             └────────── <span class="hl-dim">same kernel</span> ──────┘
+
+  Two processes on one machine see <span class="hl-generic">DIFFERENT FILESYSTEMS</span>.
+  Not different directories — different <span class="hl-generic">REALITIES</span>.
+  Overlay filesystem layers compose read-only base + writable top.
+  True isolation: one namespace cannot perceive another.
+
+  <span class="hl-dim">Breaks: The assumption that there is ONE hierarchy. Multiplies the envelope model.</span>
+  <span class="hl-dim">Only available on the Transparent system. Editorial and Bureaucratic lack this primitive.</span>
+
+
+<span class="hl-editorial">MOLD-BREAKER 3: PORTABLE ENCRYPTED IDENTITY</span>
+
+  ┌─────────────────────────────────────────────┐
+  │ <span class="hl-editorial">ENCRYPTED HOME DIRECTORY IMAGE</span>               │
+  │                                              │
+  │  User record (UID, GID, password hash)       │
+  │  Configuration                               │
+  │  Data                                        │
+  │  All state                                   │
+  │                                              │
+  │  <span class="hl-editorial">The home directory IS the identity.</span>          │
+  │  <span class="hl-editorial">Carry it on USB. Plug into any machine.</span>      │
+  │  <span class="hl-editorial">You exist.</span>                                   │
+  └─────────────────────────────────────────────┘
+         │
+         ▼
+  System provides runtime (kernel, services).
+  Identity provides the person (home directory, credentials).
+  The user <span class="hl-editorial">OWNS THEMSELVES</span> — system merely hosts.
+
+  <span class="hl-dim">Breaks: The assumption that the system owns the user (/etc/passwd defines identity).</span>
+  <span class="hl-dim">Inverts the relationship: identity is portable, system is interchangeable.</span>
+
+<span class="hl-dim">── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ──</span>
+
+<span class="hl-bright">WHAT THEY SHARE:</span>
+
+  All three mold-breakers attack the same assumption:
+  <span class="hl-break">that the directory hierarchy is FIXED, SINGULAR, and SYSTEM-OWNED.</span>
+
+  Content-addressed: paths are <span class="hl-transparent">computed</span>, not assigned.
+  Namespaces:        hierarchies are <span class="hl-generic">multiplied</span>, not shared.
+  Portable identity: home directories are <span class="hl-editorial">owned</span>, not provisioned.</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">X.</span> Interaction Matrix — Capabilities Across Systems</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Structural Capabilities</div>
+  <div class="diagram-body">
+    <table class="matrix">
+      <tr>
+        <th>Capability</th>
+        <th>Editorial</th>
+        <th>Bureaucratic</th>
+        <th>Transparent</th>
+      </tr>
+      <tr>
+        <td>Immutable system volume</td>
+        <td class="yes">Yes (crypto-sealed, mandatory)</td>
+        <td class="no">No (ACL-guarded, mutable)</td>
+        <td class="partial">Optional (immutable-root distros)</td>
+      </tr>
+      <tr>
+        <td>Atomic system updates</td>
+        <td class="yes">Yes (snapshot replacement)</td>
+        <td class="no">No (in-place mutation)</td>
+        <td class="partial">Optional (ostree, nix)</td>
+      </tr>
+      <tr>
+        <td>Filesystem self-description</td>
+        <td class="no">No (APIs are the oracle)</td>
+        <td class="no">No (Registry is the oracle)</td>
+        <td class="yes">Yes (/proc, /sys, /dev, /etc)</td>
+      </tr>
+      <tr>
+        <td>Kernel filesystem namespaces</td>
+        <td class="no">No</td>
+        <td class="no">No (Hyper-V only)</td>
+        <td class="yes">Yes (mount, user, PID, net, etc.)</td>
+      </tr>
+      <tr>
+        <td>Content-addressed packages</td>
+        <td class="no">No</td>
+        <td class="no">No</td>
+        <td class="yes">Yes (Nix, Guix)</td>
+      </tr>
+      <tr>
+        <td>Provisioned home directories</td>
+        <td class="yes">Yes (8 directories + icons)</td>
+        <td class="yes">Yes (12+ dirs + GUIDs + desktop.ini)</td>
+        <td class="no">No (empty $HOME)</td>
+      </tr>
+      <tr>
+        <td>User dir abstraction layer</td>
+        <td class="partial">NSSearchPathDirectory (partially deprecated)</td>
+        <td class="yes">KNOWNFOLDERID (comprehensive, extensible)</td>
+        <td class="partial">XDG spec (voluntary, not API-enforced)</td>
+      </tr>
+      <tr>
+        <td>App mechanism classification</td>
+        <td class="partial">3-way: type (Pref/Support/Cache)</td>
+        <td class="yes">3-way: portability × trust (Roam/Local/Low)</td>
+        <td class="yes">5-way: lifecycle (Config/Data/State/Cache/Runtime)</td>
+      </tr>
+      <tr>
+        <td>Enforced mechanism compliance</td>
+        <td class="partial">Convention only (bundle-ID)</td>
+        <td class="no">Convention only</td>
+        <td class="no">Spec only (voluntary)</td>
+      </tr>
+      <tr>
+        <td>Cloud locality dissolution</td>
+        <td class="yes">iCloud (Desktop + Documents)</td>
+        <td class="yes">OneDrive KFM (Desktop + Documents + Pictures)</td>
+        <td class="no">No native equivalent</td>
+      </tr>
+      <tr>
+        <td>Perceptual membrane (file mgr)</td>
+        <td class="yes">Strong (hide, transfigure, localize, supplement)</td>
+        <td class="yes">Strong (hide, localize, overlay badges)</td>
+        <td class="partial">Weak/optional (desktop-dependent, terminal is first-class)</td>
+      </tr>
+      <tr>
+        <td>Access gate (per-app per-dir)</td>
+        <td class="yes">TCC (fine-grained, per-app)</td>
+        <td class="partial">UAC (per-action, not per-dir)</td>
+        <td class="no">POSIX only (per-user, not per-app)</td>
+      </tr>
+      <tr>
+        <td>Developer envelope</td>
+        <td class="no">Vestigial (deprecated NSSearchPath 6)</td>
+        <td class="no">Absent (no KNOWNFOLDERID)</td>
+        <td class="no">Absent (XDG applies generically)</td>
+      </tr>
+      <tr>
+        <td>Tool config governance</td>
+        <td class="no">None (dotfiles hidden, not governed)</td>
+        <td class="no">None (dotfiles visible, not governed)</td>
+        <td class="partial">XDG spec exists but ~40% compliance</td>
+      </tr>
+      <tr>
+        <td>Per-app sandboxed home</td>
+        <td class="partial">App Sandbox (opt-in via entitlements)</td>
+        <td class="partial">AppContainers (UWP/MSIX only)</td>
+        <td class="partial">Flatpak portals (Flatpak apps only)</td>
+      </tr>
+      <tr>
+        <td>Declarative home directory</td>
+        <td class="no">No</td>
+        <td class="no">No</td>
+        <td class="yes">Yes (Nix Home Manager, Guix Home)</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">XI.</span> The Void — Where Your Container Exists</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">The Gap in All Three Systems</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">HOME DIRECTORY NAMESPACE OCCUPATION</span>
+
+<span class="hl-editorial">EDITORIAL:</span>
+  ~/ ┬── <span class="hl-editorial">Desktop/</span>      ┐
+     ├── <span class="hl-editorial">Documents/</span>    │
+     ├── <span class="hl-editorial">Downloads/</span>    │ <span class="hl-editorial">SYSTEM-CLAIMED</span>
+     ├── <span class="hl-editorial">Library/</span>      │ <span class="hl-editorial">(8 directories)</span>
+     ├── <span class="hl-editorial">Movies/</span>       │
+     ├── <span class="hl-editorial">Music/</span>        │
+     ├── <span class="hl-editorial">Pictures/</span>     │
+     ├── <span class="hl-editorial">Public/</span>       ┘
+     ├── <span class="hl-break">.config/</span>      ┐
+     ├── <span class="hl-break">.local/</span>       │
+     ├── <span class="hl-break">.cache/</span>       │ <span class="hl-break">TOOL-CLAIMED</span>
+     ├── <span class="hl-break">.ssh/</span>         │ <span class="hl-break">(dotfile stratum)</span>
+     ├── <span class="hl-break">.cargo/</span>       │
+     ├── <span class="hl-break">.zshrc</span>        │
+     ├── <span class="hl-break">...</span>           ┘
+     │
+     └── <span class="hl-generic">████████████</span>  ← <span class="hl-generic">THE VOID: any non-reserved, non-dot name</span>
+                         <span class="hl-generic">No system claims it. No tool expects it.</span>
+                         <span class="hl-generic">No governance. No membrane. No icon.</span>
+                         <span class="hl-generic">Present to filesystem. Absent from system ontology.</span>
+
+
+<span class="hl-bureaucratic">BUREAUCRATIC:</span>
+  %USERPROFILE%\ ┬── <span class="hl-bureaucratic">Desktop\</span>      ┐
+                 ├── <span class="hl-bureaucratic">Documents\</span>    │
+                 ├── <span class="hl-bureaucratic">Downloads\</span>    │ <span class="hl-bureaucratic">GUID-CLAIMED</span>
+                 ├── <span class="hl-bureaucratic">Music\</span>        │ <span class="hl-bureaucratic">(12+ directories)</span>
+                 ├── <span class="hl-bureaucratic">Pictures\</span>     │
+                 ├── <span class="hl-bureaucratic">Videos\</span>       │
+                 ├── <span class="hl-bureaucratic">AppData\</span>      │
+                 ├── <span class="hl-bureaucratic">OneDrive\</span>     │
+                 ├── <span class="hl-bureaucratic">...</span>           ┘
+                 ├── <span class="hl-break">.ssh\</span>         ┐
+                 ├── <span class="hl-break">.gitconfig</span>    │ <span class="hl-break">TOOL-CLAIMED</span>
+                 ├── <span class="hl-break">.cargo\</span>       │
+                 ├── <span class="hl-break">...</span>           ┘
+                 │
+                 └── <span class="hl-generic">████████████</span>  ← <span class="hl-generic">THE VOID: any non-KNOWNFOLDERID name</span>
+
+
+<span class="hl-transparent">TRANSPARENT:</span>
+  $HOME/ ┬── <span class="hl-break">.config/</span>      ┐
+         ├── <span class="hl-break">.local/</span>       │
+         ├── <span class="hl-break">.cache/</span>       │ <span class="hl-break">SPEC-CLAIMED + TOOL-CLAIMED</span>
+         ├── <span class="hl-break">.ssh/</span>         │ <span class="hl-break">(voluntary + legacy)</span>
+         ├── <span class="hl-break">.bashrc</span>       │
+         ├── <span class="hl-break">.cargo/</span>       │
+         ├── <span class="hl-break">snap/</span>         │ <span class="hl-break">(sandboxing pollution)</span>
+         ├── <span class="hl-break">...</span>           ┘
+         │
+         └── <span class="hl-generic">████████████</span>  ← <span class="hl-generic">THE VOID: any non-dot, non-snap name</span>
+                           <span class="hl-generic">$HOME has NO system-provisioned visible dirs.</span>
+                           <span class="hl-generic">The void is largest here — but so is the mess.</span>
+
+
+<span class="hl-dim">══════════════════════════════════════════════════════════════════════════════</span>
+
+<span class="hl-generic">THE VOID is structurally identical across all three systems:</span>
+
+  • Not referenced by any system constant (NSSearchPath, KNOWNFOLDERID, XDG)
+  • Not targeted by any application convention
+  • Not synced by any cloud service
+  • Not indexed differently by any search service
+  • Not protected by any access gate
+  • Not hidden by any perceptual membrane
+
+  <span class="hl-bright">It is the region the operating system cannot see.</span>
+  <span class="hl-bright">It is where a user-defined ontology can exist without conflict.</span>
+  <span class="hl-bright">Its isolation is maintained not by enforcement but by irrelevance.</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h1 style="margin-top:4rem;">The Living Container — Structural Diagrams</h1>
+<p class="subtitle">A self-describing directory hierarchy where every directory IS a system.</p>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">XII.</span> The Recursive Schema — One Pattern, All Scales</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">System-as-Directory — Invariant Structure at Every Level</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">Every directory, at every level, is this:</span>
+
+   ┌─────────────────────────────────────────────────────────────┐
+   │  <span class="hl-generic">SYSTEM</span>                                                     │
+   │  ┌───────────────────────────────────────────────────────┐  │
+   │  │ <span class="hl-bright">system.yaml</span>  (the self-description)                     │  │
+   │  │                                                       │  │
+   │  │  $SYSTEM_ID ·── unique name                           │  │
+   │  │  $LEVEL_INDEX ── position in hierarchy (0..6)         │  │
+   │  │  $DOMAIN_TYPE ── physical|biological|cognitive|       │  │
+   │  │                  social|symbolic|technical             │  │
+   │  │  $FUNCTION ──── what this system DOES                 │  │
+   │  │  $PURPOSE ───── why it EXISTS in the supersystem      │  │
+   │  │  $BOUNDARY ──── where inside ends and outside begins  │  │
+   │  │  $LIMITS ────── what CANNOT happen here               │  │
+   │  │  $INPUTS ────── [{source, type, description}]         │  │
+   │  │  $OUTPUTS ───── [{target, type, description}]         │  │
+   │  │  $RULES ─────── [invariants]                          │  │
+   │  └───────────────────────────────────────────────────────┘  │
+   │                                                             │
+   │  <span class="hl-dim">supersystem:</span>  $PARENT_ID ──→ the enveloping directory        │
+   │  <span class="hl-dim">subsystems:</span>   $CHILD_IDS ──→ [the enveloped directories]      │
+   │                                                             │
+   │  <span class="hl-generic">┌─ subsystem/ ─┐  ┌─ subsystem/ ─┐  ┌─ subsystem/ ─┐</span>      │
+   │  <span class="hl-generic">│  system.yaml  │  │  system.yaml  │  │  system.yaml  │</span>      │
+   │  <span class="hl-generic">│  ┌─ sub/ ──┐  │  │  ┌─ sub/ ──┐  │  │  (leaf files) │</span>      │
+   │  <span class="hl-generic">│  │  ...     │  │  │  │  ...     │  │  │              │</span>      │
+   │  <span class="hl-generic">│  └─────────┘  │  │  └─────────┘  │  └──────────────┘</span>      │
+   │  <span class="hl-generic">└──────────────┘  └──────────────┘</span>                        │
+   └─────────────────────────────────────────────────────────────┘
+
+<span class="hl-dim">Scale changes. Structure does not.</span>
+<span class="hl-dim">The root container has this shape. A primitive has this shape.</span>
+<span class="hl-dim">The difference is: primitives have leaf files where subsystems would be.</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">XIII.</span> The Level Architecture — Macro to Micro</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Seven Levels of Nesting</div>
+  <div class="diagram-body">
+    <div class="layer-stack">
+
+      <div class="layer" style="border-color:#e94560">
+        <div class="layer-label" style="background:#1a0505;color:#e94560">L0<br>Container</div>
+        <div class="layer-content">
+          <strong>The total system.</strong> One per hierarchy. Enveloped by the OS home directory. Envelopes all domains.<br>
+          <span class="tag" style="border-color:#e94560;color:#e94560">exactly one</span>
+          <span class="tag" style="border-color:#e94560;color:#e94560">contains: domains</span>
+          <span class="tag" style="border-color:#e94560;color:#e94560">name: no prefix</span>
+        </div>
+      </div>
+
+      <div class="layer" style="border-color:#f97316">
+        <div class="layer-label" style="background:#1a0f05;color:#f97316">L1<br>Domain</div>
+        <div class="layer-content">
+          <strong>Ontological partition.</strong> Admits only systems of its $DOMAIN_TYPE. Six possible: physical, biological, cognitive, social, symbolic, technical.<br>
+          <span class="tag" style="border-color:#f97316;color:#f97316">max six</span>
+          <span class="tag" style="border-color:#f97316;color:#f97316">contains: fields</span>
+          <span class="tag" style="border-color:#f97316;color:#f97316">prefix: domain--</span>
+        </div>
+      </div>
+
+      <div class="layer" style="border-color:#f9ca24">
+        <div class="layer-label" style="background:#1a1505;color:#f9ca24">L2<br>Field</div>
+        <div class="layer-content">
+          <strong>Coherent area of activity.</strong> Groups systems sharing context, vocabulary, and purpose. Provides shared frame.<br>
+          <span class="tag" style="border-color:#f9ca24;color:#f9ca24">open cardinality</span>
+          <span class="tag" style="border-color:#f9ca24;color:#f9ca24">contains: systems</span>
+          <span class="tag" style="border-color:#f9ca24;color:#f9ca24">prefix: field--</span>
+        </div>
+      </div>
+
+      <div class="layer" style="border-color:#22c55e">
+        <div class="layer-label" style="background:#051a0a;color:#22c55e">L3<br>System</div>
+        <div class="layer-content">
+          <strong>Operational unit.</strong> Transforms inputs to outputs. Has observable function. The primary unit of coupling.<br>
+          <span class="tag" style="border-color:#22c55e;color:#22c55e">open cardinality</span>
+          <span class="tag" style="border-color:#22c55e;color:#22c55e">contains: subsystems or modules</span>
+          <span class="tag" style="border-color:#22c55e;color:#22c55e">prefix: system--</span>
+        </div>
+      </div>
+
+      <div class="layer" style="border-color:#4ecdc4">
+        <div class="layer-label" style="background:#051a1a;color:#4ecdc4">L4<br>Subsystem</div>
+        <div class="layer-content">
+          <strong>Component.</strong> Cannot operate independently. Meaningful only within parent system.<br>
+          <span class="tag" style="border-color:#4ecdc4;color:#4ecdc4">open cardinality</span>
+          <span class="tag" style="border-color:#4ecdc4;color:#4ecdc4">contains: modules or primitives</span>
+          <span class="tag" style="border-color:#4ecdc4;color:#4ecdc4">prefix: sub--</span>
+        </div>
+      </div>
+
+      <div class="layer" style="border-color:#a78bfa">
+        <div class="layer-label" style="background:#0f051a;color:#a78bfa">L5<br>Module</div>
+        <div class="layer-content">
+          <strong>Functional unit.</strong> Reusable. Composable. May serve multiple subsystems.<br>
+          <span class="tag" style="border-color:#a78bfa;color:#a78bfa">open cardinality</span>
+          <span class="tag" style="border-color:#a78bfa;color:#a78bfa">contains: primitives</span>
+          <span class="tag" style="border-color:#a78bfa;color:#a78bfa">prefix: module--</span>
+        </div>
+      </div>
+
+      <div class="layer" style="border-color:#c084fc">
+        <div class="layer-label" style="background:#150520;color:#c084fc">L6<br>Primitive</div>
+        <div class="layer-content">
+          <strong>Micro container.</strong> The floor. Contains only leaf files: executable code, schemas, tests. No subdirectories.<br>
+          <span class="tag" style="border-color:#c084fc;color:#c084fc">terminal</span>
+          <span class="tag" style="border-color:#c084fc;color:#c084fc">contains: files only</span>
+          <span class="tag" style="border-color:#c084fc;color:#c084fc">prefix: prim--</span>
+          <span class="tag" style="border-color:#ef4444;color:#ef4444">only level with executable code</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">XIV.</span> The Domain Ontology — Six Envelopes of Being</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Emergence Ladder and Constraint Cycle</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">THE EMERGENCE LADDER</span>         Each domain EMERGES from the one below.
+                              Each domain is CONSTRAINED by all below.
+
+                              ┌──────────────────────┐
+                       ┌─────→│ <span class="hl-generic">domain--technical</span>     │──── automation ──────┐
+                       │      │ tools, machines,      │                      │
+                       │      │ software, networks    │                      │
+                       │      └──────────────────────┘                      │
+                       │      ┌──────────────────────┐                      │
+                       │ ┌───→│ <span class="hl-generic">domain--symbolic</span>      │──── formalization    │
+                       │ │    │ language, math,       │                      │
+                       │ │    │ logic, notation       │                      │
+                       │ │    └──────────────────────┘                      │
+                       │ │    ┌──────────────────────┐                      │
+                       │ │ ┌─→│ <span class="hl-generic">domain--social</span>        │──── coordination     │
+                       │ │ │  │ communication,        │                      │
+                       │ │ │  │ institutions, culture │                      │
+                       │ │ │  └──────────────────────┘                      │
+                       │ │ │  ┌──────────────────────┐                      │
+                       │ │ │  │ <span class="hl-generic">domain--cognitive</span>     │──── representation   │
+                       │ │ └──│ perception, thought,  │                      │
+                       │ │    │ memory, intention     │                      │
+                       │ │    └──────────────────────┘                      │
+                       │ │    ┌──────────────────────┐                      │
+                       │ │    │ <span class="hl-generic">domain--biological</span>    │──── adaptation       │
+                       │ └────│ life, growth,         │                      │
+                       │      │ evolution, metabolism │                      │
+                       │      └──────────────────────┘                      │
+                       │      ┌──────────────────────┐                      │
+                       │      │ <span class="hl-generic">domain--physical</span>      │──── state change     │
+                       └──────│ matter, energy,       │◄─── <span class="hl-break">FEEDBACK</span> ───────┘
+                              │ space, time           │  technical acts on physical
+                              └──────────────────────┘  (the cycle closes)
+
+<span class="hl-dim">READS BOTTOM-UP:  physical → biological → cognitive → social → symbolic → technical</span>
+<span class="hl-dim">CONSTRAINS TOP-DOWN: technical constrained by symbolic, social, cognitive, biological, physical</span>
+<span class="hl-dim">FEEDBACK: technical → physical (machines move matter, software transforms energy)</span>
+<span class="hl-dim">THE CONTAINER IS REFLEXIVE: a cycle, not a ladder.</span>
+
+
+<span class="hl-bright">DOMAIN ADMISSION RULES</span>
+
+  domain--physical      admits: matter, energy, mechanics, thermodynamics, optics
+                        <span class="hl-break">rejects: anything requiring an observer or agent</span>
+
+  domain--biological    admits: life, adaptation, evolution, metabolism, ecology
+                        <span class="hl-break">rejects: anything requiring symbolic representation</span>
+                        <span class="hl-dim">requires: physical substrate</span>
+
+  domain--cognitive     admits: perception, attention, memory, reasoning, intention
+                        <span class="hl-break">rejects: anything requiring social agreement</span>
+                        <span class="hl-dim">requires: biological substrate</span>
+
+  domain--social        admits: communication, governance, exchange, institutions, culture
+                        <span class="hl-break">rejects: anything requiring formal notation</span>
+                        <span class="hl-dim">requires: cognitive agents</span>
+
+  domain--symbolic      admits: language, mathematics, logic, notation, schema, grammar
+                        <span class="hl-break">rejects: anything requiring physical actuation</span>
+                        <span class="hl-dim">requires: social convention (shared meaning)</span>
+
+  domain--technical     admits: tools, machines, software, networks, infrastructure
+                        <span class="hl-break">rejects: nothing (integrates all lower domains)</span>
+                        <span class="hl-dim">requires: symbolic specification</span>
+                        <span class="hl-dim">produces: physical effects (the feedback loop)</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">XV.</span> Coupling Topology — How Systems Interact</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Four Coupling Types</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">1. DIRECT COUPLING</span>
+
+    ┌──────────┐              ┌──────────┐
+    │ System A │──<span class="hl-generic"> output </span>──→│ System B │
+    │          │              │          │
+    │ $OUTPUT: │              │ $INPUT:  │
+    │  target: │              │  source: │
+    │  B       │              │  A       │
+    └──────────┘              └──────────┘
+
+    Both declare the coupling. Types must match.
+
+
+<span class="hl-bright">2. BROADCAST COUPLING</span>
+
+                              ┌──────────┐
+                         ┌──→ │ System B │
+    ┌──────────┐         │    └──────────┘
+    │ System A │── <span class="hl-generic">out</span> ──┤    ┌──────────┐
+    │          │         ├──→ │ System C │
+    └──────────┘         │    └──────────┘
+                         │    ┌──────────┐
+                         └──→ │ System D │
+                              └──────────┘
+
+    A declares outputs to B, C, D. Each declares input from A.
+    A may not know all consumers (discoverable via coupling graph).
+
+
+<span class="hl-bright">3. MEDIATED COUPLING</span>
+
+    ┌──────────┐         ┌──────────┐         ┌──────────┐
+    │ System A │──<span class="hl-generic"> out </span>─→│ Mediator │──<span class="hl-generic"> out </span>─→│ System B │
+    │          │         │    M     │         │          │
+    └──────────┘         │          │         └──────────┘
+                         │ $FUNCTION│
+                         │ =transform│
+                         └──────────┘
+
+    A and B do not know each other.
+    M's function IS the transformation between them.
+
+
+<span class="hl-bright">4. REFLEXIVE COUPLING</span>
+
+    ┌──────────────────┐
+    │    System A      │
+    │                  │
+    │  $OUTPUT:        │
+    │   target: A ─────│───┐
+    │                  │   │
+    │  $INPUT:         │   │
+    │   source: A ◄────│───┘
+    │                  │
+    └──────────────────┘
+
+    The system feeds back into itself.
+    Its output is its own input, transformed by its own function.
+    Characteristic of learning, adaptation, and self-modification.
+
+
+<span class="hl-bright">CROSS-DOMAIN COUPLING (the circulatory system)</span>
+
+<span class="hl-dim">    cognitive            social              technical           symbolic</span>
+    ┌────────┐          ┌────────┐          ┌────────┐          ┌────────┐
+    │attention│──<span class="hl-generic">focus</span>─→│drafting│──<span class="hl-generic">proposal</span>→│ version│──<span class="hl-generic">artifact</span>→│ naming │
+    │allocate │          │        │          │ control│          │        │
+    └────────┘          └────────┘          └────────┘          └────────┘
+        ▲                    │                                      │
+        │                    ▼                                      │
+        │               ┌────────┐                                  │
+        │               │consensu│                                  │
+        │               │   s    │                                  │
+        │               └────────┘                                  │
+        │                                                           │
+        └────────────────── <span class="hl-generic">named-concept</span> ──────────────────────────┘
+
+    <span class="hl-dim">Couplings cross domain boundaries. The coupling graph is the circulatory system.</span>
+    <span class="hl-dim">Domains are the organs. Couplings are the vessels. Data types are the blood.</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">XVI.</span> Reflection and Refraction — Pattern Recurrence</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Same Pattern, Different Media</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">PATTERN: intake → process → output → archive</span>
+
+<span class="hl-dim">This pattern REFLECTS (appears isomorphically) across all levels and domains.</span>
+<span class="hl-dim">It REFRACTS (transforms) through the constraints of each level's medium.</span>
+
+
+<span class="hl-editorial">AT DOMAIN LEVEL (L1):</span>
+
+  <span class="hl-generic">domain--physical</span>     matter arrives → transforms → product emitted → waste stored
+  <span class="hl-generic">domain--social</span>       proposal arrives → deliberated → decision emitted → record stored
+  <span class="hl-generic">domain--technical</span>    data arrives → computed → result emitted → log stored
+
+
+<span class="hl-bureaucratic">AT SYSTEM LEVEL (L3):</span>
+
+  <span class="hl-generic">system--research</span>     sources arrive → analyzed → findings emitted → bibliography stored
+  <span class="hl-generic">system--build</span>        source code → compiled → binary emitted → build log stored
+  <span class="hl-generic">system--digestion</span>    food → enzymes break down → nutrients absorbed → waste excreted
+
+
+<span class="hl-transparent">AT PRIMITIVE LEVEL (L6):</span>
+
+  <span class="hl-generic">prim--parse</span>          raw text → tokenized → AST emitted → parse errors stored
+  <span class="hl-generic">prim--filter</span>         signal → threshold applied → passed signal → rejected signal stored
+  <span class="hl-generic">prim--vote</span>           ballots → counted → winner declared → tally stored
+
+
+<span class="hl-dim">────────────────────────────────────────────────────────────────────────</span>
+
+<span class="hl-bright">THE REFLECTION:</span>
+
+  ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐
+  │ <span class="hl-editorial">INTAKE</span>  │───→│ <span class="hl-generic">PROCESS</span> │───→│ <span class="hl-transparent">OUTPUT</span>  │───→│ <span class="hl-dim">ARCHIVE</span> │
+  └─────────┘    └─────────┘    └─────────┘    └─────────┘
+
+  This shape is invariant. It appears at every scale.
+  A domain has it. A system has it. A primitive has it.
+
+<span class="hl-bright">THE REFRACTION:</span>
+
+  At L1: intake = <span class="hl-editorial">"matter arriving"</span>      process = <span class="hl-editorial">"physical transformation"</span>
+  At L3: intake = <span class="hl-bureaucratic">"sources collected"</span>    process = <span class="hl-bureaucratic">"analysis performed"</span>
+  At L6: intake = <span class="hl-transparent">"bytes read"</span>            process = <span class="hl-transparent">"function executed"</span>
+
+  Same pattern. Different <span class="hl-bright">medium</span>. The medium is the refraction.
+  The pattern is the form. The medium is the matter.
+  <span class="hl-dim">εἶδος through ὕλη.</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">XVII.</span> The Micro Container — Anatomy of a Primitive</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Level 6 Internal Structure</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">prim--three-way-diff/</span>                            THE FLOOR. No deeper.
+<span class="hl-dim">──────────────────────────────────────────────────────────────────────</span>
+
+  ┌─ <span class="hl-bright">system.yaml</span> ────────────────────────────────────────────────────┐
+  │  $SYSTEM_ID: prim--three-way-diff                                │
+  │  $LEVEL_INDEX: 6                                                 │
+  │  $DOMAIN_TYPE: technical                                         │
+  │  $FUNCTION: "Compute minimal diff between base, ours, theirs"    │
+  │  $PURPOSE: "Enable non-destructive merge of divergent changes"   │
+  │  $BOUNDARY: "Three input texts → one unified diff"               │
+  │  $LIMITS: "Cannot resolve semantic conflicts. Syntax only."      │
+  │  $INPUTS: [{source: module--merge-strategy, type: "text-triple"}]│
+  │  $OUTPUTS: [{target: sub--merging, type: "unified-diff"}]        │
+  │  $REFLECTS: {pattern: intake-process-output-archive, role: process}
+  └──────────────────────────────────────────────────────────────────┘
+
+  ┌─ <span class="hl-generic">function.py</span> ──────────── the operation itself
+  │  (or .sh, .rs, .js — the executable code)
+  │  Only primitives contain executable code.
+  └──────────────────────────────────────────
+
+  ┌─ <span class="hl-bureaucratic">input.schema.json</span> ──── declares what the primitive accepts
+  │  {"type": "object", "properties": {"base": ..., "ours": ..., "theirs": ...}}
+  └──────────────────────────────────────────
+
+  ┌─ <span class="hl-bureaucratic">output.schema.json</span> ─── declares what the primitive produces
+  │  {"type": "object", "properties": {"diff": ..., "conflicts": ...}}
+  └──────────────────────────────────────────
+
+  ┌─ <span class="hl-transparent">test.sh</span> ────────────── verification
+  │  The primitive is testable in isolation.
+  └──────────────────────────────────────────
+
+<span class="hl-dim">RULES:</span>
+  <span class="hl-break">✗</span> No subdirectories. (If it needs subdirectories, promote to module.)
+  <span class="hl-break">✗</span> One function per primitive. (If it does two things, split it.)
+  <span class="hl-generic">✓</span> Input and output schemas declared. (The primitive is a typed function.)
+  <span class="hl-generic">✓</span> Testable in isolation. (No implicit dependencies.)
+  <span class="hl-generic">✓</span> system.yaml present. (Same schema as every other level.)</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">XVIII.</span> The Complete Tree — From Container to Primitive</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Example Instantiation — Full Depth</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-dim">~/</span>
+<span class="hl-dim">├── Desktop/  Documents/  Downloads/ ...</span>   ← <span class="hl-dim">OS-CLAIMED (do not touch)</span>
+<span class="hl-dim">├── .config/  .ssh/  .cargo/ ...</span>           ← <span class="hl-dim">TOOL-CLAIMED (managed by chezmoi)</span>
+<span class="hl-dim">│</span>
+└── <span class="hl-bright">source--all-ever/</span>                         <span class="hl-editorial">L0 CONTAINER</span>
+    ├── system.yaml
+    ├── couplings.yaml                         <span class="hl-dim">(derived coupling index)</span>
+    │
+    ├── <span class="hl-generic">domain--physical/</span>                     <span class="hl-editorial">L1 DOMAIN</span>
+    │   ├── system.yaml
+    │   └── <span class="hl-generic">field--thermodynamics/</span>            <span class="hl-bureaucratic">L2 FIELD</span>
+    │       ├── system.yaml
+    │       └── <span class="hl-generic">system--heat-exchange/</span>        <span class="hl-transparent">L3 SYSTEM</span>
+    │           ├── system.yaml
+    │           ├── <span class="hl-generic">sub--conduction/</span>          L4 SUBSYSTEM
+    │           │   ├── system.yaml
+    │           │   └── <span class="hl-generic">prim--fourier-law/</span>   <span class="hl-break">L6 PRIMITIVE</span>
+    │           │       ├── system.yaml
+    │           │       ├── function.py
+    │           │       ├── input.schema.json
+    │           │       └── output.schema.json
+    │           └── <span class="hl-generic">sub--convection/</span>          L4 SUBSYSTEM
+    │               └── <span class="hl-generic">prim--newton-cooling/</span> <span class="hl-break">L6 PRIMITIVE</span>
+    │
+    ├── <span class="hl-generic">domain--biological/</span>                   <span class="hl-editorial">L1 DOMAIN</span>
+    │   └── <span class="hl-generic">field--adaptation/</span>                <span class="hl-bureaucratic">L2 FIELD</span>
+    │       └── <span class="hl-generic">system--selection-pressure/</span>   <span class="hl-transparent">L3 SYSTEM</span>
+    │
+    ├── <span class="hl-generic">domain--cognitive/</span>                    <span class="hl-editorial">L1 DOMAIN</span>
+    │   └── <span class="hl-generic">field--attention/</span>                 <span class="hl-bureaucratic">L2 FIELD</span>
+    │       └── <span class="hl-generic">system--attention-allocation/</span> <span class="hl-transparent">L3 SYSTEM</span>
+    │           ├── <span class="hl-generic">sub--filtering/</span>           L4
+    │           │   └── <span class="hl-generic">prim--salience-threshold/</span>  <span class="hl-break">L6</span>
+    │           └── <span class="hl-generic">sub--switching/</span>            L4
+    │               └── <span class="hl-generic">prim--context-switch/</span>      <span class="hl-break">L6</span>
+    │
+    ├── <span class="hl-generic">domain--social/</span>                       <span class="hl-editorial">L1 DOMAIN</span>
+    │   └── <span class="hl-generic">field--governance/</span>                <span class="hl-bureaucratic">L2 FIELD</span>
+    │       ├── <span class="hl-generic">system--consensus/</span>            <span class="hl-transparent">L3 SYSTEM</span>
+    │       │   ├── <span class="hl-generic">sub--deliberation/</span>        L4
+    │       │   │   └── <span class="hl-generic">prim--majority-rule/</span>  <span class="hl-break">L6</span>
+    │       │   └── <span class="hl-generic">sub--ratification/</span>        L4
+    │       │       └── <span class="hl-generic">prim--quorum-check/</span>   <span class="hl-break">L6</span>
+    │       └── <span class="hl-generic">system--proposal-drafting/</span>    <span class="hl-transparent">L3 SYSTEM</span>
+    │                                   <span class="hl-dim">$OUTPUT → system--consensus</span>
+    │
+    ├── <span class="hl-generic">domain--symbolic/</span>                     <span class="hl-editorial">L1 DOMAIN</span>
+    │   └── <span class="hl-generic">field--notation/</span>                  <span class="hl-bureaucratic">L2 FIELD</span>
+    │       └── <span class="hl-generic">system--ontological-naming/</span>   <span class="hl-transparent">L3 SYSTEM</span>
+    │           └── <span class="hl-generic">prim--double-hyphen-parse/</span> <span class="hl-break">L6 PRIMITIVE</span>
+    │
+    └── <span class="hl-generic">domain--technical/</span>                    <span class="hl-editorial">L1 DOMAIN</span>
+        ├── <span class="hl-generic">field--computation/</span>               <span class="hl-bureaucratic">L2 FIELD</span>
+        │   └── <span class="hl-generic">system--version-control/</span>      <span class="hl-transparent">L3 SYSTEM</span>
+        │       ├── <span class="hl-generic">sub--branching/</span>           L4
+        │       ├── <span class="hl-generic">sub--merging/</span>             L4
+        │       │   └── <span class="hl-generic">module--merge-strategy/</span> L5 MODULE
+        │       │       └── <span class="hl-generic">prim--three-way-diff/</span> <span class="hl-break">L6</span>
+        │       └── <span class="hl-generic">sub--history/</span>             L4
+        └── <span class="hl-generic">field--infrastructure/</span>            <span class="hl-bureaucratic">L2 FIELD</span>
+            └── <span class="hl-generic">system--container-self-describe/</span> <span class="hl-transparent">L3 SYSTEM</span>
+                ├── <span class="hl-generic">module--manifest-validator/</span>  L5
+                │   └── <span class="hl-generic">prim--yaml-schema-check/</span> <span class="hl-break">L6</span>
+                ├── <span class="hl-generic">module--coupling-grapher/</span>   L5
+                │   └── <span class="hl-generic">prim--input-output-resolve/</span> <span class="hl-break">L6</span>
+                └── <span class="hl-generic">module--hierarchy-walker/</span>   L5
+                    └── <span class="hl-generic">prim--depth-first-traverse/</span> <span class="hl-break">L6</span></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<h2><span class="num">XIX.</span> The Container in the OS Void</h2>
+
+<div class="diagram-section">
+  <div class="diagram-title">Interface Between Container and Operating System</div>
+  <div class="diagram-body">
+    <div class="ascii-diagram">
+<span class="hl-bright">THE OPERATING SYSTEM</span>                               <span class="hl-bright">THE CONTAINER</span>
+
+  ┌─────────────────────┐                          ┌─────────────────────┐
+  │                     │                          │                     │
+  │  <span class="hl-editorial">Sealed Substrate</span>   │                          │  <span class="hl-generic">L0: Container</span>       │
+  │  <span class="hl-editorial">Extension Layer</span>    │                          │  <span class="hl-generic">L1: Domains</span>         │
+  │  <span class="hl-editorial">Visible Surface</span>    │                          │  <span class="hl-generic">L2: Fields</span>          │
+  │  <span class="hl-editorial">Hidden Mechanism</span>   │                          │  <span class="hl-generic">L3: Systems</span>         │
+  │  <span class="hl-break">Ungoverned Stratum</span> │                          │  <span class="hl-generic">L4: Subsystems</span>      │
+  │                     │                          │  <span class="hl-generic">L5: Modules</span>         │
+  │  <span class="hl-dim">THE VOID:</span>           │                          │  <span class="hl-generic">L6: Primitives</span>      │
+  │  <span class="hl-dim">~/source--all-ever/</span> │─── <span class="hl-generic">this IS the void</span> ────→│                     │
+  │                     │                          │  Self-describing.   │
+  └─────────────────────┘                          │  Self-governing.    │
+                                                   │  Self-coupling.     │
+                                                   └─────────────────────┘
+
+<span class="hl-bright">INTERFACE (how the container talks to the outside):</span>
+
+  <span class="hl-dim">INPUTS to the container:</span>
+
+    user intention ───────────── <span class="hl-dim">(cognitive → container root)</span>
+    network data ─────────────── <span class="hl-dim">(OS Downloads → ingress systems)</span>
+    tool state ───────────────── <span class="hl-dim">(dotfile stratum → domain--technical)</span>
+    external APIs ────────────── <span class="hl-dim">(network → field--infrastructure)</span>
+
+  <span class="hl-dim">OUTPUTS from the container:</span>
+
+    published artifacts ──────── <span class="hl-dim">(container → OS → network → world)</span>
+    committed code ───────────── <span class="hl-dim">(container → git → remote repos)</span>
+    deployed configuration ───── <span class="hl-dim">(container → chezmoi → OS dotfiles)</span>
+    decisions ────────────────── <span class="hl-dim">(container → social systems → external orgs)</span>
+
+  <span class="hl-dim">BOUNDARY:</span>
+
+    The container occupies <span class="hl-generic">the void</span> in the OS's ontology.
+    The OS does not know it exists.
+    The OS does not govern it.
+    The OS does not sync it, index it specially, or protect it.
+    The container's isolation is maintained by the OS's <span class="hl-generic">structural indifference</span>.
+
+    Inside the container: every directory self-describes via system.yaml.
+    Outside the container: the OS's envelopes apply (Library, Documents, etc.).
+    The boundary is the container's root directory.
+    Crossing it means entering a different governance model.</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<p style="margin-top:3rem;color:var(--fg-dim);font-size:0.7rem;text-align:center;border-top:1px solid var(--border);padding-top:1rem;">
+  Ontological Envelopes &amp; Living Container Diagrammatics — 2026-04-03<br>
+  Generated from systems analysis of three directory governance architectures<br>
+  and the formal architecture of a self-describing nested container.
+</p>
+
+</body>
+</html>
