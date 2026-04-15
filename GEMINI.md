@@ -8,12 +8,21 @@
 - **Produces** → `unspecified`: theory
 
 ### Siblings in Theory
-`recursive-engine--generative-entity`, `organon-noumenon--ontogenetic-morphe`, `auto-revision-epistemic-engine`, `narratological-algorithmic-lenses`, `sema-metra--alchemica-mundi`, `cognitive-archaelogy-tribunal`, `a-recursive-root`, `radix-recursiva-solve-coagula-redi`, `.github`, `nexus--babel-alexandria`, `4-ivi374-F0Rivi4`, `cog-init-1-0-`, `linguistic-atomization-framework`, `my-knowledge-base`, `scalable-lore-expert` ... and 6 more
+`recursive-engine--generative-entity`, `organon-noumenon--ontogenetic-morphe`, `auto-revision-epistemic-engine`, `narratological-algorithmic-lenses`, `sema-metra--alchemica-mundi`, `cognitive-archaelogy-tribunal`, `a-recursive-root`, `radix-recursiva-solve-coagula-redi`, `.github`, `nexus--babel-alexandria`, `4-ivi374-F0Rivi4`, `cog-init-1-0-`, `linguistic-atomization-framework`, `my-knowledge-base`, `scalable-lore-expert` ... and 10 more
 
 ### Governance
 - Foundational theory layer. No upstream dependencies.
 
-*Last synced: 2026-04-03T15:19:54Z*
+*Last synced: 2026-04-14T21:31:45Z*
+
+## Active Handoff Protocol
+
+If `.conductor/active-handoff.md` exists, **READ IT FIRST** before doing any work.
+It contains constraints, locked files, conventions, and completed work from the
+originating agent. You MUST honor all constraints listed there.
+
+If the handoff says "CROSS-VERIFICATION REQUIRED", your self-assessment will
+NOT be trusted. A different agent will verify your output against these constraints.
 
 ## Session Review Protocol
 
@@ -27,6 +36,13 @@ Transcripts are on-demand (never committed):
 - `organvm session transcript <id>` — conversation summary
 - `organvm session transcript <id> --unabridged` — full audit trail
 - `organvm session prompts <id>` — human prompts only
+
+
+## System Library
+
+Plans: 269 indexed | Chains: 5 available | SOPs: 121 active
+Discover: `organvm plans search <query>` | `organvm chains list` | `organvm sop lifecycle`
+Library: `meta-organvm/praxis-perpetua/library/`
 
 
 ## Active Directives
@@ -103,11 +119,42 @@ Linked skills: cicd-resilience-and-recovery, continuous-learning-agent, evaluati
 Run: `organvm ecosystem show call-function--ontological` | `organvm ecosystem validate --organ I`
 
 
+## Entity Identity (Ontologia)
+
+**UID:** `ent_repo_01KKKX3RVHNE558ZWT23TP2S3H` | **Matched by:** primary_name
+
+Resolve: `organvm ontologia resolve call-function--ontological` | History: `organvm ontologia history ent_repo_01KKKX3RVHNE558ZWT23TP2S3H`
+
+
+## Live System Variables (Ontologia)
+
+| Variable | Value | Scope | Updated |
+|----------|-------|-------|---------|
+| `active_repos` | 89 | global | 2026-04-14 |
+| `archived_repos` | 54 | global | 2026-04-14 |
+| `ci_workflows` | 107 | global | 2026-04-14 |
+| `code_files` | 0 | global | 2026-04-14 |
+| `dependency_edges` | 60 | global | 2026-04-14 |
+| `operational_organs` | 10 | global | 2026-04-14 |
+| `published_essays` | 29 | global | 2026-04-14 |
+| `repos_with_tests` | 0 | global | 2026-04-14 |
+| `sprints_completed` | 33 | global | 2026-04-14 |
+| `test_files` | 0 | global | 2026-04-14 |
+| `total_organs` | 10 | global | 2026-04-14 |
+| `total_repos` | 145 | global | 2026-04-14 |
+| `total_words_formatted` | 0 | global | 2026-04-14 |
+| `total_words_numeric` | 0 | global | 2026-04-14 |
+| `total_words_short` | 0K+ | global | 2026-04-14 |
+
+Metrics: 9 registered | Observations: 32128 recorded
+Resolve: `organvm ontologia status` | Refresh: `organvm refresh`
+
+
 ## System Density (auto-generated)
 
-AMMOI: 56% | Edges: 41 | Tensions: 0 | Clusters: 0 | Adv: 12 | Events(24h): 27428
-Structure: 8 organs / 128 repos / 1654 components (depth 17) | Inference: 0% | Organs: META-ORGANVM:64%, ORGAN-I:55%, ORGAN-II:47%, ORGAN-III:55% +4 more
-Last pulse: 2026-04-03T15:19:54 | Δ24h: -0.0% | Δ7d: n/a
+AMMOI: 58% | Edges: 42 | Tensions: 33 | Clusters: 5 | Adv: 23 | Events(24h): 32336
+Structure: 8 organs / 145 repos / 1654 components (depth 17) | Inference: 98% | Organs: META-ORGANVM:65%, ORGAN-I:53%, ORGAN-II:48%, ORGAN-III:54% +5 more
+Last pulse: 2026-04-14T21:31:36 | Δ24h: -1.0% | Δ7d: n/a
 
 
 ## Dialect Identity (Trivium)
@@ -140,14 +187,14 @@ Nature demands a documentation counterpart. This formation maintains its narrati
 
 <!-- ORGANVM:AUTO:END -->
 
-## Active Handoff Protocol
 
-If `.conductor/active-handoff.md` exists, **READ IT FIRST** before doing any work.
-It contains constraints, locked files, conventions, and completed work from the
-originating agent. You MUST honor all constraints listed there.
 
-If the handoff says "CROSS-VERIFICATION REQUIRED", your self-assessment will
-NOT be trusted. A different agent will verify your output against these constraints.
+
+
+
+
+
+
 
 
 ## ⚡ Conductor OS Integration
